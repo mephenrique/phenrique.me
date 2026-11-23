@@ -38,9 +38,7 @@ export default defineConfig({
            * `paper` and `graphite` are one continuous ramp split at the
            * midpoint, because each theme draws from one half only.
            *
-           * Near-neutral on purpose (OKLCH chroma ≤ 0.004, a whisper of warmth).
-           * The previous cream ramp (#F0EEE6, #FAF6F2) was claude.ai's own canvas;
-           * warmth now comes from the accent, not from every surface.
+           * Slightly warm paper surfaces meet a cooler graphite dark theme.
            */
           paper: {
             0: { value: "#FFFFFF" }, // code panel (light) — top of the surface ramp
@@ -49,7 +47,7 @@ export default defineConfig({
             200: { value: "#F4F4F2" }, // raised surface (light)
             300: { value: "#ECECEA" }, // hover (light), primary text (dark)
             400: { value: "#E0E0DC" }, // default border (light)
-            500: { value: "#C2C2BD" }, // strong border (light), secondary text (dark)
+            500: { value: "#C1C4C9" }, // strong border (light), secondary text (dark)
           },
 
           /**
@@ -57,36 +55,33 @@ export default defineConfig({
            * `graphite.950`; light-mode text reads down from `graphite.400`.
            */
           graphite: {
-            300: { value: "#A1A19C" }, // muted text (dark)
+            300: { value: "#A6AAB1" }, // muted text (dark)
             400: { value: "#878782" }, // decorative / disabled only — 3.5:1 on paper.50
             500: { value: "#6B6B66" }, // muted text (light)
             600: { value: "#52524E" }, // secondary text (light)
-            700: { value: "#3A3A37" }, // strong border (dark)
-            800: { value: "#262625" }, // default border (dark), hover (dark)
-            850: { value: "#1C1C1B" }, // primary text (light), raised-hover (dark)
-            900: { value: "#151514" }, // raised surface (dark)
-            950: { value: "#0B0B0A" }, // app canvas (dark)
+            700: { value: "#484D55" }, // strong border (dark)
+            800: { value: "#363A40" }, // default border (dark), hover (dark)
+            850: { value: "#2B2E33" }, // primary text (light), raised-hover (dark)
+            900: { value: "#222529" }, // raised surface (dark)
+            950: { value: "#191B1E" }, // app canvas (dark)
           },
 
           /**
-           * Brand accent. `vermilion.500` is the fixed brand value — a saturated
-           * signal orange, deliberately far from the dusty clay it replaced. It is
-           * only 3.0:1 on `paper.50`, so it never carries small text in light
-           * mode: `vermilion.600` (oxide, 5.9:1) does. The jump between the two
-           * is intentional — one is a fill, the other is ink.
+           * Cobalt blue. The midtone marks active controls; deeper and lighter
+           * steps keep links readable on paper and graphite respectively.
            */
-          vermilion: {
-            50: { value: "#FFF1EA" },
-            100: { value: "#FFDCC9" },
-            200: { value: "#FFBE9C" },
-            300: { value: "#FF9A66" },
-            400: { value: "#FF7A33" },
-            500: { value: "#FF5B04" }, // brand
-            600: { value: "#A93F17" }, // accessible on light surfaces
-            700: { value: "#84310F" },
-            800: { value: "#5C220B" },
-            900: { value: "#3A1607" },
-            950: { value: "#220D04" },
+          cobalt: {
+            50: { value: "#EEF4FF" },
+            100: { value: "#DDEAFF" },
+            200: { value: "#BED6FF" },
+            300: { value: "#A2C5FF" },
+            400: { value: "#82B0FA" },
+            500: { value: "#4583E8" }, // brand
+            600: { value: "#285EB8" }, // accessible on light surfaces
+            700: { value: "#204B93" },
+            800: { value: "#193C75" },
+            900: { value: "#183357" },
+            950: { value: "#182C48" },
           },
 
           /**
@@ -133,12 +128,12 @@ export default defineConfig({
             900: { value: "#33260C" },
           },
 
-          /** Diff / status hues. GitHub's, kept because they are purpose-built. */
+          /** Diff / status hues. Red and green with bright variants for graphite surfaces. */
           signal: {
             green: { value: "#1A7F37" },
             greenBright: { value: "#3FB950" },
             red: { value: "#CF222E" },
-            redBright: { value: "#F85149" },
+            redBright: { value: "#FF6C63" },
           },
 
           /**
@@ -147,7 +142,7 @@ export default defineConfig({
            * are not the editorial tints on purpose — the tints share one lightness
            * so badges read as a quiet set, which is exactly what makes code
            * illegible. `scripts/check-syntax-colors.ts` holds every pair to 5:1 on
-           * `bg.raised` and a minimum distance from each other; run it after a tweak.
+           * `bg.code` and a minimum distance from each other; run it after a tweak.
            */
           code: {
             plum: { value: "#9A2F6B" },
@@ -200,7 +195,7 @@ export default defineConfig({
             // Track behind a progress fill.
             track: { value: { base: "{colors.paper.400}", _dark: "{colors.graphite.800}" } },
             // Blurred header pill. Alpha is required for the backdrop-filter.
-            overlay: { value: { base: "rgba(250, 250, 249, 0.5)", _dark: "rgba(11, 11, 10, 0.55)" } },
+            overlay: { value: { base: "rgba(250, 250, 249, 0.5)", _dark: "rgba(25, 27, 30, 0.55)" } },
             // Modal backdrop behind a sheet.
             scrim: { value: { base: "rgba(10, 10, 10, 0.32)", _dark: "rgba(0, 0, 0, 0.5)" } },
             // Radial bloom behind the home hero; invisible by design in light mode.
@@ -208,19 +203,19 @@ export default defineConfig({
             // Solid fill for a primary control: the canvas turned inside out, so
             // the pill reads as the darkest thing on a light page and the
             // lightest on a dark one. Pairs with `text.onInverted` and nothing
-            // else — 16.3:1 light, 16.6:1 dark.
+            // else.
             inverted: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } },
             invertedHover: { value: { base: "{colors.graphite.950}", _dark: "{colors.paper.500}" } },
           },
 
-          /** Foreground. Every role here clears 4.5:1 on `bg.canvas`. */
+          /** Foreground. Reserve faint for incidental details. */
           text: {
-            primary: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } }, // 16.3:1 / 16.6:1
-            secondary: { value: { base: "{colors.graphite.600}", _dark: "{colors.paper.500}" } }, // 7.5:1 / 11.0:1
-            muted: { value: { base: "{colors.graphite.500}", _dark: "{colors.graphite.300}" } }, // 5.1:1 / 7.6:1
+            primary: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } },
+            secondary: { value: { base: "{colors.graphite.600}", _dark: "{colors.paper.500}" } },
+            muted: { value: { base: "{colors.graphite.500}", _dark: "{colors.graphite.300}" } },
             faint: { value: { base: "{colors.graphite.400}", _dark: "{colors.graphite.400}" } }, // decorative only
-            accent: { value: { base: "{colors.vermilion.600}", _dark: "{colors.vermilion.500}" } }, // 5.9:1 / 6.3:1
-            // vermilion.500 is too bright for light text (3.0:1); dark ink sits on it at 6.3:1.
+            accent: { value: { base: "{colors.cobalt.600}", _dark: "{colors.cobalt.400}" } },
+            // Dark ink labels the default accent fill in either theme.
             onAccent: { value: { base: "{colors.graphite.950}", _dark: "{colors.graphite.950}" } },
             // The only foreground allowed on `bg.inverted`.
             onInverted: { value: { base: "{colors.paper.50}", _dark: "{colors.graphite.950}" } },
@@ -232,10 +227,9 @@ export default defineConfig({
             subtle: { value: { base: "rgba(10, 10, 10, 0.12)", _dark: "rgba(255, 255, 255, 0.12)" } },
             default: { value: { base: "{colors.paper.400}", _dark: "{colors.graphite.800}" } },
             strong: { value: { base: "{colors.paper.500}", _dark: "{colors.graphite.700}" } },
-            accent: { value: { base: "{colors.vermilion.500}", _dark: "{colors.vermilion.500}" } },
-            // Keyboard focus ring. Deliberately not `accent`: vermilion.500 is 3.0:1 on
-            // the light canvas — too close to the 3:1 a focus indicator needs.
-            focus: { value: { base: "{colors.vermilion.600}", _dark: "{colors.vermilion.500}" } }, // 5.9:1 / 6.3:1
+            accent: { value: { base: "{colors.cobalt.500}", _dark: "{colors.cobalt.400}" } },
+            // A dedicated focus colour stays legible across raised and inset surfaces.
+            focus: { value: { base: "{colors.cobalt.600}", _dark: "{colors.cobalt.400}" } },
             underline: { value: { base: "rgba(10, 10, 10, 0.15)", _dark: "rgba(255, 255, 255, 0.3)" } },
             underlineHover: { value: { base: "rgba(10, 10, 10, 0.3)", _dark: "rgba(255, 255, 255, 0.55)" } },
             // Hairline between rows of a grouped list.
@@ -245,10 +239,10 @@ export default defineConfig({
           /** Brand accent as an interactive role. `default` is for fills,
            *  indicators and rings; text must go through `text.accent`. */
           accent: {
-            default: { value: { base: "{colors.vermilion.500}", _dark: "{colors.vermilion.500}" } },
-            hover: { value: { base: "{colors.vermilion.600}", _dark: "{colors.vermilion.400}" } },
-            subtle: { value: { base: "{colors.vermilion.50}", _dark: "{colors.vermilion.950}" } },
-            emphasis: { value: { base: "{colors.vermilion.700}", _dark: "{colors.vermilion.300}" } },
+            default: { value: { base: "{colors.cobalt.500}", _dark: "{colors.cobalt.400}" } },
+            hover: { value: { base: "{colors.cobalt.600}", _dark: "{colors.cobalt.300}" } },
+            subtle: { value: { base: "{colors.cobalt.50}", _dark: "{colors.cobalt.950}" } },
+            emphasis: { value: { base: "{colors.cobalt.700}", _dark: "{colors.cobalt.200}" } },
           },
 
           /** Status. Reserved for state, never decoration. */
@@ -282,17 +276,17 @@ export default defineConfig({
            *  well as hue: identifiers are near-black, colour sits at ~5–6:1, and
            *  comments recede without dropping under 4.5:1. */
           syntax: {
-            text: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } }, // 17.1:1 / 15.4:1 on bg.code
+            text: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } },
             punctuation: { value: { base: "{colors.graphite.700}", _dark: "{colors.paper.500}" } },
-            comment: { value: { base: "{colors.code.stone}", _dark: "{colors.graphite.300}" } }, // 6.0:1 / 7.0:1 on bg.code
+            comment: { value: { base: "{colors.code.stone}", _dark: "{colors.graphite.300}" } },
             keyword: { value: { base: "{colors.code.plum}", _dark: "{colors.code.plumBright}" } },
             string: { value: { base: "{colors.code.green}", _dark: "{colors.code.greenBright}" } },
             constant: { value: { base: "{colors.code.vermilion}", _dark: "{colors.code.vermilionBright}" } },
             function: { value: { base: "{colors.code.blue}", _dark: "{colors.code.blueBright}" } },
             parameter: { value: { base: "{colors.code.amber}", _dark: "{colors.code.amberBright}" } },
-            // Diff lines. `signal.green`/`red` miss 4.5:1 on `bg.raised` in light mode.
+            // Diff lines retain their red, green and amber meanings across themes.
             inserted: { value: { base: "{colors.moss.600}", _dark: "{colors.signal.greenBright}" } },
-            deleted: { value: { base: "{colors.vermilion.700}", _dark: "{colors.signal.redBright}" } },
+            deleted: { value: { base: "{colors.signal.red}", _dark: "{colors.signal.redBright}" } },
             changed: { value: { base: "{colors.ochre.600}", _dark: "{colors.ochre.400}" } },
           },
 
@@ -399,10 +393,8 @@ export default defineConfig({
             menuSurface: { value: "#262626" },
             menuBorder: { value: "#252525" },
             menuItemHover: { value: "#404040" },
-            // Keyboard focus ring: the same vermilion as `border.focus` in dark mode, so
-            // focus reads the same across the site. 6.8:1 on the canvas, 4.8:1 on
-            // `control` and 4.9:1 on `menuSurface`, 3.3:1 on a highlighted `menuItemHover`.
-            focus: { value: "{colors.vermilion.500}" },
+            // Matches the dark theme focus ring on this always-dark page.
+            focus: { value: "{colors.cobalt.400}" },
             separator: { value: "#3F3F46" },
             headingFrom: { value: "#F5F5F5" },
             headingTo: { value: "#999999" },

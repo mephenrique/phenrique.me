@@ -51,7 +51,7 @@ Full documentation: **[`docs/design-system.md`](docs/design-system.md)**, publis
 
 Two layers, and only the second is public API:
 
-- **Layer 1 — raw palette** (`theme.extend.tokens.colors`): `sand`, `ink`, `coral`, the editorial tints (`sage`, `moss`, `sky`, `periwinkle`, `clay`, `ochre`), `signal` and `code` (syntax hues). Never referenced from a component.
+- **Layer 1 — raw palette** (`theme.extend.tokens.colors`): `paper`, `graphite`, `cobalt`, the editorial tints (`sage`, `moss`, `sky`, `periwinkle`, `clay`, `ochre`), `signal` and `code` (syntax hues). Never referenced from a component.
 - **Layer 2 — semantic roles** (`theme.extend.semanticTokens.colors`): `bg.*`, `text.*`, `border.*`, `accent.*`, `status.*`, `syntax.*`, `sheet.*`, `tint.*`, `linkbio.*`. Each carries a `{ base, _dark }` pair. **This is what components write.**
 
 ```ts
@@ -59,14 +59,14 @@ Two layers, and only the second is public API:
 css({ bg: "bg.raised", color: "text.secondary", borderColor: "border.subtle" })
 
 // ❌ raw palette (single value) or hex (invisible to the system)
-css({ bg: "sand.200", color: "#55504A" })
+css({ bg: "paper.200", color: "#55504A" })
 ```
 
 Rules worth knowing before writing styles:
 
 - **No hex, no `rgba()` in components.** Every colour is a semantic token. Translucent tokens (`bg.hover`, `bg.scrim`, `border.subtle`, `border.underline`, `border.hairline`) already cover the cases a solid ramp step cannot.
-- **`accent.default` is never text.** It is for fills, rings and indicators. Accent text uses `text.accent`, which resolves to `coral.600` in light mode — `coral.500` is only 2.9:1 on the cream canvas and fails AA.
-- **Focus rings use `border.focus`, not `border.accent`.** Same reason: a focus indicator needs 3:1, and `border.focus` is `coral.600` in light mode. Standard ring is `_focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" }`; inset it (`-2px`) inside a bordered group such as the theme switch.
+- **`accent.default` is never text.** It is for fills, rings and indicators. Accent text uses `text.accent`, which resolves to `cobalt.600` in light mode — `cobalt.500` is only 3.5:1 on the light canvas and fails AA.
+- **Focus rings use `border.focus`, not `border.accent`.** Same reason: a focus indicator needs 3:1, and `border.focus` is `cobalt.600` in light mode. Standard ring is `_focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" }`; inset it (`-2px`) inside a bordered group such as the theme switch.
 - **Text levels:** `text.primary` headings · `text.secondary` body and prose · `text.muted` single-line metadata · `text.faint` incidental only (3.5:1, fails AA by design).
 - **`tint.*` classifies content, not chrome.** Use `surface`/`text`/`border` as a matched set; never mix hues across a set. Chips go through `Badge` (`src/ui/components/badge.astro`, `tone` prop), not hand-rolled `css()`. Assign a hue per category with `tintForKey` from `src/utils/tint.ts`, pinning small known vocabularies explicitly (see `GENRE_HUES` in `book-genre-badge.astro`) — never by list index.
 - **Panda extracts styles statically.** A computed token path such as `` css({ bg: `tint.${hue}.surface` }) `` generates no CSS at all. Use a `Record<Hue, string>` of literal `css()` calls and index into it. The same applies to token names inside JS strings: write CSS custom properties in kebab-case (`--colors-bg-raised-hover`), not the dotted token path.

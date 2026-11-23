@@ -18,7 +18,7 @@ Good typography is the backbone of comfortable, focused reading. This site pairs
 
 The aesthetic of this site is rooted in tactile, paper-like materials rather than flat, sterile digital canvases.
 
-- **Canvas & Grain**: A subtle paper-grain texture layered onto a warm cream canvas (`sand` palette) in light mode and deep obsidian (`ink` palette) in dark mode.
+- **Canvas & Grain**. The light theme pairs a fine paper grain with an off-white background. In dark mode, cards sit one shade above a cool graphite canvas. Cobalt marks links, keyboard focus and the current page.
 - **Semantic Tokens**: Every color is expressed through Panda CSS semantic roles (`bg.*`, `text.*`, `border.*`, `accent.*`, `status.*`). No raw hex values or ad-hoc transparency are used in components.
 - **Accessible Contrast**: Headings and body copy meet WCAG AA standards, with focus indicators explicitly styled using `border.focus` for keyboard accessibility.
 

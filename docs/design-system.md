@@ -32,7 +32,7 @@ Two layers, and only the second is public API.
 
 ```
 ┌─ Layer 1 · raw palette ──────────── theme.extend.tokens.colors ──┐
-│  paper · graphite · vermilion · sage · moss · sky · periwinkle   │
+│  paper · graphite · cobalt    · sage · moss · sky · periwinkle   │
 │  ochre · signal                                                  │
 │  Fixed hues on fixed ramps. Never referenced from a component.   │
 └──────────────────────────────┬───────────────────────────────────┘
@@ -66,49 +66,38 @@ Dark mode is the `_dark` condition, which Panda compiles to `.dark &`. The class
 | `paper.200`    | `#F4F4F2` | raised surface (light)                            |
 | `paper.300`    | `#ECECEA` | hover (light) · **primary text (dark)**           |
 | `paper.400`    | `#E0E0DC` | default border (light)                            |
-| `paper.500`    | `#C2C2BD` | strong border (light) · **secondary text (dark)** |
-| `graphite.300` | `#A1A19C` | muted text (dark)                                 |
+| `paper.500`    | `#C1C4C9` | strong border (light) · **secondary text (dark)** |
+| `graphite.300` | `#A6AAB1` | muted text (dark)                                 |
 | `graphite.400` | `#878782` | decorative only — 3.5:1, fails body text          |
 | `graphite.500` | `#6B6B66` | muted text (light)                                |
 | `graphite.600` | `#52524E` | secondary text (light)                            |
-| `graphite.700` | `#3A3A37` | strong border (dark)                              |
-| `graphite.800` | `#262625` | default border (dark) · hover (dark)              |
-| `graphite.850` | `#1C1C1B` | **primary text (light)** · raised hover (dark)    |
-| `graphite.900` | `#151514` | raised surface (dark)                             |
-| `graphite.950` | `#0B0B0A` | app canvas (dark) · **fixed**                     |
+| `graphite.700` | `#484D55` | strong border (dark)                              |
+| `graphite.800` | `#363A40` | default border (dark) · hover (dark)              |
+| `graphite.850` | `#2B2E33` | **primary text (light)** · raised hover (dark)    |
+| `graphite.900` | `#222529` | raised surface (dark)                             |
+| `graphite.950` | `#191B1E` | app canvas (dark) · **fixed**                     |
 
-The ramp is near-neutral end to end — OKLCH chroma at or under 0.004, a whisper of warmth so it does not read as a stock grey scale. It replaced a cream ramp (`#F0EEE6`, `#FAF6F2`) that was, value for value, the canvas of claude.ai; paired with the old clay accent, it made the site read as AI-generated. Warmth now comes from the accent, used sparingly, rather than from every surface.
+Light surfaces have a slight paper warmth. The dark canvas uses cool graphite, with lighter steps for cards, hover states and dividers.
 
-### Accent — vermilion
+### Accent — cobalt
 
-`vermilion.500` `#FF5B04` is the brand colour and does not change. It is a saturated signal orange on purpose: the clay it replaced (`#D97757`) was Anthropic's, and what made that one recognisable was its dustiness.
+`cobalt.500` is the brand blue for active marks on paper. On graphite, the lighter `cobalt.400` carries the same emphasis.
 
 | Token           | Value     | Role                                  |
 | --------------- | --------- | ------------------------------------- |
-| `vermilion.50`  | `#FFF1EA` | subtle accent surface (light)         |
-| `vermilion.100` | `#FFDCC9` |                                       |
-| `vermilion.200` | `#FFBE9C` |                                       |
-| `vermilion.300` | `#FF9A66` | accent emphasis (dark)                |
-| `vermilion.400` | `#FF7A33` | accent hover (dark)                   |
-| `vermilion.500` | `#FF5B04` | **brand** — fills, indicators, rings  |
-| `vermilion.600` | `#A93F17` | accent text on light surfaces (oxide) |
-| `vermilion.700` | `#84310F` | accent emphasis (light)               |
-| `vermilion.800` | `#5C220B` |                                       |
-| `vermilion.900` | `#3A1607` |                                       |
-| `vermilion.950` | `#220D04` | subtle accent surface (dark)          |
+| `cobalt.50`  | `#EEF4FF` | subtle accent surface (light)         |
+| `cobalt.100` | `#DDEAFF` |                                       |
+| `cobalt.200` | `#BED6FF` | accent emphasis (dark)                |
+| `cobalt.300` | `#A2C5FF` | accent hover (dark)                |
+| `cobalt.400` | `#82B0FA` | dark accent text, fills and focus                   |
+| `cobalt.500` | `#4583E8` | **brand** — fills, indicators, rings  |
+| `cobalt.600` | `#285EB8` | accent text on light surfaces  |
+| `cobalt.700` | `#204B93` | accent emphasis (light)               |
+| `cobalt.800` | `#193C75` |                                       |
+| `cobalt.900` | `#183357` |                                       |
+| `cobalt.950` | `#182C48` | subtle accent surface (dark)          |
 
-> **Why the ramp exists.** `vermilion.500` on `paper.50` is **3.0:1** — well under the
-> 4.5:1 WCAG AA threshold for body text. It is perfectly fine as a _fill_ (a
-> progress bar, an active ring, an icon), because those are not text. But small
-> text in light mode must use `vermilion.600` (**5.9:1**). In dark mode `vermilion.500`
-> on `graphite.950` is **6.3:1** and needs no substitute. The lightness jump from
-> 500 to 600 is deliberate: one is a fill, the other is ink.
->
-> `text.accent` already encodes this: `vermilion.600` in light, `vermilion.500` in dark.
-> Use it and the problem disappears.
->
-> Keep the accent rare — the wordmark, links, one indicator per view. Rarity is
-> what makes it read as an identity rather than decoration.
+Use `text.accent` for links and `border.focus` for keyboard focus. Both resolve to deep cobalt on paper and light cobalt on graphite.
 
 ### Editorial tints
 
@@ -129,7 +118,7 @@ Four steps each. `100`/`900` are surfaces (light/dark); `600`/`400` are the text
 
 ### Signal
 
-Diff and status hues, kept from GitHub because they are purpose-built for the red/green distinction and already tuned for both themes.
+Red and green distinguish deletions and insertions, with brighter variants for graphite surfaces.
 
 | Token                | Hex       |
 | -------------------- | --------- |
@@ -172,7 +161,7 @@ This is the API. Everything below is what a component writes.
 | `bg.sunken`      | `paper.100`            | `graphite.900`          | wells and recessed areas             |
 | `bg.hover`       | `rgba(10,10,10,.05)`   | `rgba(255,255,255,.06)` | hover on an _unknown_ surface        |
 | `bg.track`       | `paper.400`            | `graphite.800`          | the groove behind a progress fill    |
-| `bg.overlay`     | `rgba(250,246,242,.5)` | `rgba(13,11,10,.55)`    | the blurred header pill              |
+| `bg.overlay`     | `rgba(250,250,249,.5)` | `rgba(25,27,30,.55)`    | the blurred header pill              |
 | `bg.scrim`       | `rgba(10,10,10,.32)`   | `rgba(0,0,0,.5)`        | modal backdrop                       |
 | `bg.bloom`       | transparent            | `rgba(255,255,255,.03)` | radial bloom behind the home hero    |
 
@@ -190,12 +179,12 @@ Ratios are measured against `bg.canvas` in the corresponding theme.
 
 | Token            | Light           | Dark            | Contrast (light / dark)        |
 | ---------------- | --------------- | --------------- | ------------------------------ |
-| `text.primary`   | `graphite.850`  | `paper.300`     | 16.3:1 / 16.6:1                |
-| `text.secondary` | `graphite.600`  | `paper.500`     | 7.5:1 / 11.0:1                 |
-| `text.muted`     | `graphite.500`  | `graphite.300`  | 5.1:1 / 7.6:1                  |
-| `text.faint`     | `graphite.400`  | `graphite.400`  | 3.5:1 — **decorative only**    |
-| `text.accent`    | `vermilion.600` | `vermilion.500` | 5.9:1 / 6.3:1                  |
-| `text.onAccent`  | `graphite.950`  | `graphite.950`  | text on an accent fill — 6.3:1 |
+| `text.primary`   | `graphite.850`  | `paper.300`     | 13.0:1 / 14.6:1          |
+| `text.secondary` | `graphite.600`  | `paper.500`     | 7.5:1 / 9.9:1            |
+| `text.muted`     | `graphite.500`  | `graphite.300`  | 5.1:1 / 7.4:1            |
+| `text.faint`     | `graphite.400`  | `graphite.400`  | 3.5:1 / 4.8:1 · incidental only |
+| `text.accent`    | `cobalt.600` | `cobalt.400` | 5.9:1 / 7.8:1            |
+| `text.onAccent`  | `graphite.950`  | `graphite.950`  | 4.7:1 / 7.8:1 on fill    |
 
 **Choosing a level.** `primary` for headings and anything that must be read first. `secondary` for body copy and multi-line prose. `muted` for single-line metadata — authors, section labels, timestamps with context.
 `faint` only where the text is genuinely incidental and never load-bearing; it fails AA for body text by design.
@@ -207,24 +196,24 @@ Ratios are measured against `bg.canvas` in the corresponding theme.
 | `border.subtle`         | `rgba(10,10,10,.12)` | `rgba(255,255,255,.12)` | card and button outlines         |
 | `border.default`        | `paper.400`          | `graphite.800`          | dividers, menu edges, rules      |
 | `border.strong`         | `paper.500`          | `graphite.700`          | emphasis, empty-state glyphs     |
-| `border.accent`         | `vermilion.500`      | `vermilion.500`         | active indicators, quote rules   |
-| `border.focus`          | `vermilion.600`      | `vermilion.500`         | keyboard focus rings             |
+| `border.accent`         | `cobalt.500`      | `cobalt.400`         | active indicators, quote rules   |
+| `border.focus`          | `cobalt.600`      | `cobalt.400`         | keyboard focus rings             |
 | `border.underline`      | `rgba(10,10,10,.15)` | `rgba(255,255,255,.3)`  | link underlines at rest          |
 | `border.underlineHover` | `rgba(10,10,10,.3)`  | `rgba(255,255,255,.55)` | link underlines on hover         |
 | `border.hairline`       | `rgba(10,10,10,.09)` | `rgba(255,255,255,.11)` | row separators in a grouped list |
 
 The translucent ones are deliberate exceptions to "use a ramp step": a stroke that has to sit on an unknown surface cannot be a solid colour.
 
-**Focus rings use `border.focus`, never `border.accent`.** A focus indicator needs 3:1 against what surrounds it, and `vermilion.500` is only 3.0:1 on the light canvas; `vermilion.600` is 5.9:1. The standard ring is `outline: 2px solid token(colors.border.focus)` with a `2px` offset. Inset it (`-2px`) when the control sits flush inside a bordered group, such as a segmented switch or a grouped-list row, so the ring does not cut the group's edge.
+**Focus rings use `border.focus`, never `border.accent`.** The focus colour clears 3:1 on the canvas and raised surfaces. The standard ring is `outline: 2px solid token(colors.border.focus)` with a `2px` offset. Inset it (`-2px`) when the control sits flush inside a bordered group, such as a segmented switch or a grouped-list row, so the ring does not cut the group's edge.
 
 ### `accent.*` — the brand as an interactive role
 
 | Token             | Light           | Dark            | Use for                     |
 | ----------------- | --------------- | --------------- | --------------------------- |
-| `accent.default`  | `vermilion.500` | `vermilion.500` | fills, progress, indicators |
-| `accent.hover`    | `vermilion.600` | `vermilion.400` | hover on an accent element  |
-| `accent.subtle`   | `vermilion.50`  | `vermilion.950` | tinted accent background    |
-| `accent.emphasis` | `vermilion.700` | `vermilion.300` | pressed / highest emphasis  |
+| `accent.default`  | `cobalt.500` | `cobalt.400` | fills, progress, indicators |
+| `accent.hover`    | `cobalt.600` | `cobalt.300` | hover on an accent element  |
+| `accent.subtle`   | `cobalt.50`  | `cobalt.950` | tinted accent background    |
+| `accent.emphasis` | `cobalt.700` | `cobalt.200` | pressed / highest emphasis  |
 
 **`accent.default` is not for text.** Fills and rings only. Accent _text_ goes through `text.accent`, which is contrast-corrected per theme.
 
@@ -246,17 +235,17 @@ Ratios are measured against `bg.code`, the code panel, in the corresponding them
 
 | Token                | Light            | Dark                   | Contrast (light / dark) |
 | -------------------- | ---------------- | ---------------------- | ----------------------- |
-| `syntax.text`        | `graphite.850`   | `paper.300`            | 17.1:1 / 15.4:1         |
-| `syntax.punctuation` | `graphite.700`   | `paper.500`            | 11.4:1 / 10.2:1         |
-| `syntax.comment`     | `code.stone`     | `graphite.300`         | 6.0:1 / 7.0:1           |
-| `syntax.keyword`     | `code.plum`      | `code.plumBright`      | 7.0:1 / 7.7:1           |
-| `syntax.string`      | `code.green`     | `code.greenBright`     | 6.4:1 / 10.3:1          |
-| `syntax.constant`    | `code.vermilion` | `code.vermilionBright` | 6.2:1 / 8.7:1           |
-| `syntax.function`    | `code.blue`      | `code.blueBright`      | 7.0:1 / 8.5:1           |
-| `syntax.parameter`   | `code.amber`     | `code.amberBright`     | 6.3:1 / 10.6:1          |
-| `syntax.inserted`    | `moss.600`       | `signal.greenBright`   | 7.0:1 / 7.2:1           |
-| `syntax.deleted`     | `vermilion.700`  | `signal.redBright`     | 8.7:1 / 5.5:1           |
-| `syntax.changed`     | `ochre.600`      | `ochre.400`            | 6.4:1 / 9.1:1           |
+| `syntax.text`        | `graphite.850`   | `paper.300`            | 13.6:1 / 13.0:1          |
+| `syntax.punctuation` | `graphite.700`   | `paper.500`            | 8.5:1 / 8.8:1            |
+| `syntax.comment`     | `code.stone`     | `graphite.300`         | 6.0:1 / 6.6:1            |
+| `syntax.keyword`     | `code.plum`      | `code.plumBright`      | 7.0:1 / 6.5:1            |
+| `syntax.string`      | `code.green`     | `code.greenBright`     | 6.4:1 / 8.7:1            |
+| `syntax.constant`    | `code.vermilion` | `code.vermilionBright` | 6.2:1 / 7.3:1            |
+| `syntax.function`    | `code.blue`      | `code.blueBright`      | 7.0:1 / 7.2:1            |
+| `syntax.parameter`   | `code.amber`     | `code.amberBright`     | 6.2:1 / 8.9:1            |
+| `syntax.inserted`    | `moss.600`       | `signal.greenBright`   | 7.0:1 / 6.1:1            |
+| `syntax.deleted`     | `signal.red`  | `signal.redBright`     | 5.4:1 / 5.6:1            |
+| `syntax.changed`     | `ochre.600`      | `ochre.400`            | 6.4:1 / 7.7:1            |
 
 **How it reaches the page.** Comark's Shiki plugin tokenises code at build time with Shiki's css-variables theme (`src/utils/code-theme.ts`), so the markup carries `color: var(--shiki-token-keyword)` rather than a hex value. `global.css` binds each `--shiki-token-*` to a `syntax.*` role on `.shiki`, and the roles switch with the page like every other semantic token. Shiki's `string-expression` and `link` are folded into `string` and `function`.
 
@@ -364,7 +353,7 @@ class
 
 `canvas` · `surface` · `border` · `ring` · `textPrimary` · `textSecondary` · `control` · `controlHover` · `menuSurface` · `menuBorder` · `menuItemHover` · `separator` · `headingFrom` · `headingTo` · `focus`
 
-`linkbio.focus` is the keyboard focus ring, bound to `vermilion.500` so focus looks the same here as on the rest of the site (where `border.focus` resolves to the same colour in dark mode). It clears 3:1 on every linkbio surface: 6.8:1 on the canvas, 4.8:1 on `control` and 4.9:1 on `menuSurface`, 3.3:1 on a highlighted `menuItemHover`. Use `outline: 2px solid token(colors.linkbio.focus)` with a `2px` offset, inset (`-2px`) for menu items.
+`linkbio.focus` is the keyboard focus ring, bound to `cobalt.400` like the main dark theme. It clears 3:1 even on the highlighted menu row. Use `outline: 2px solid token(colors.linkbio.focus)` with a `2px` offset, inset (`-2px`) for menu items.
 
 **Only** `src/views/linkbio/**` and `src/layouts/linkbio-layout.astro` may use these, and those files must use nothing else.
 
@@ -411,7 +400,7 @@ Rendered Markdown is styled by the `.prose` layer in `src/ui/styles/global.css`,
 }
 ```
 
-Prose links are vermilion, matching the rest of the site. They were previously emerald, which put a second, unrelated accent in the middle of every article.
+Prose links use the same cobalt text accent as the rest of the site.
 
 This layer replaced `@prose-ui/style`, adopted when the site ran on Next.js and MDX. Roughly half of that stylesheet styled its own React components (`.callout`, `.steps`, `.cards`, `.tabs`, `.code-group`); Comark emits none of them, and only ten of its 222 rules ever matched a page. Its colours were not carried over: unbound properties fell back to neutral greys — `oklch(0.97 0 0)`
 behind inline code, `oklch(0.5 0 0)` for table headers — which sat outside the token system and were invisible to the system.
@@ -536,8 +525,8 @@ Code blocks are coloured through `syntax.*` — see [that section](#syntax--code
 Every text role clears WCAG AA (4.5:1) on its intended surface, in both themes. The two deliberate exceptions are documented where they appear:
 
 - **`text.faint`** — 3.5:1. Incidental text only, never load-bearing.
-- **`vermilion.500` as text on light** — 3.0:1. Which is exactly why `text.accent`
-  resolves to `vermilion.600` in light mode. Do not hand-roll `vermilion.500` text.
+- **`cobalt.500` as text on light** — 3.5:1. Which is exactly why `text.accent`
+  resolves to `cobalt.600` in light mode. Do not hand-roll `cobalt.500` text.
 
 Syntax colours are held to a stricter 5:1 on `bg.code`, plus a minimum separation from each other, by `npm run check:syntax`, which runs in `build`.
 

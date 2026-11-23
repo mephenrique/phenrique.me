@@ -18,7 +18,7 @@ Uma boa tipografia é a espinha dorsal de uma leitura confortável e atenta. Est
 
 A estética deste site se apoia em materiais táteis e na sensação de papel, evitando telas digitais frias ou genéricas.
 
-- **Canvas & Textura**: Uma textura sutil de fibra de papel (*paper grain*) aplicada sobre uma tela creme acolhedora (paleta `sand`) no tema claro e obsidiana profunda (paleta `ink`) no tema escuro.
+- **Fundo e textura**. No tema claro, uma textura fina de papel aparece sobre um fundo branco levemente quente. No escuro, os cartões ficam um tom acima do fundo grafite. O azul-cobalto identifica links, o foco do teclado e a página atual.
 - **Tokens Semânticos**: Cada cor é expressa por papéis semânticos via Panda CSS (`bg.*`, `text.*`, `border.*`, `accent.*`, `status.*`). Nenhum valor hexadecimal fixo ou transparência avulsa é utilizado nos componentes.
 - **Contraste Acessível**: Títulos e corpos de texto respeitam os padrões WCAG AA, com indicadores de foco desenhados especificamente com `border.focus` para navegação acessível por teclado.
 
