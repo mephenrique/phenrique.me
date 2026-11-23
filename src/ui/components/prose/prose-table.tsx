@@ -16,17 +16,17 @@ import type { ProseDictionary } from "../../../i18n/prose/types.ts";
  */
 const wrapperStyles = css({
   overflowX: "auto",
+  border: "1px solid",
+  borderColor: "border.subtle",
+  borderRadius: "8px",
   _focusVisible: {
     outline: "2px solid token(colors.border.focus)",
     outlineOffset: "2px",
-    borderRadius: "sm",
   },
 });
 
 const tableStyles = css({
   width: "full",
-  // Cells keep their content on one line where they can; the wrapper scrolls.
-  minWidth: "max-content",
   borderCollapse: "collapse",
 });
 
@@ -37,7 +37,7 @@ interface Props {
 export function createProseTable(dictionary: ProseDictionary) {
   return function ProseTable({ children }: Props) {
     return (
-      <div className={wrapperStyles} data-prose-panel data-prose-track="wide" role="region" aria-label={dictionary["table-label"]} tabIndex={0}>
+      <div className={wrapperStyles} data-prose-table data-prose-panel data-prose-track="wide" role="region" aria-label={dictionary["table-label"]} tabIndex={0}>
         <table className={tableStyles}>{children}</table>
       </div>
     );

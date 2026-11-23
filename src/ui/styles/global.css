@@ -148,6 +148,15 @@ html {
     grid-column: wide;
   }
 
+  /* Wrap prose in cells at the reading measure. More columns or unbreakable
+     values can widen the table up to the article edges. */
+  .prose-longform > [data-prose-table] {
+    justify-self: center;
+    width: min-content;
+    min-width: min(100%, var(--prose-measure));
+    max-width: 100%;
+  }
+
   /* Aligns page furniture outside `.prose` — a post's date, title and back link —
      to the same measure as the prose beneath it. */
   .prose-column {
@@ -468,17 +477,25 @@ html {
   }
 
   .prose :is(th, td) {
-    padding: 12px 10px;
+    padding: 12px clamp(12px, 2vw, 16px);
+    vertical-align: top;
     border-bottom: 1px solid var(--colors-border-hairline);
     font-size: 0.875rem;
     line-height: 1.45;
     text-align: left;
   }
 
+  .prose thead {
+    background-color: var(--colors-bg-raised);
+  }
+
+  .prose tbody:last-child > tr:last-child > :is(th, td) {
+    border-bottom: 0;
+  }
+
   .prose th {
-    color: var(--colors-text-muted);
+    color: var(--colors-text-primary);
     font-weight: 600;
-    white-space: nowrap;
   }
 
   .prose hr {
