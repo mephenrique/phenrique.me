@@ -514,9 +514,9 @@ And it has two silent failure modes, both of which now fail the build instead:
 Both were found by writing them, not by reading the plugin. `assertFootnotesResolved`
 skips code, so a character class like `[^abc]` in a regex passes through.
 
-There are no fixture posts, so judge changes to this layer against the pages that use it. `/about` carries links, footnotes, `::callout` and `::quote`. `/writing/interfaces-are-arguments` carries `::tweet` embeds, tables and a code block. `/writing/the-shape-of-a-good-change` carries task lists; it is a draft, so it renders under `npm run dev` only. No page uses `::aside` or `::figure` yet, so a change to either needs a throwaway draft to be checked against.
+Judge changes to this layer against the pages that use it. `/about` carries links, footnotes, `::callout` and `::quote`. `/pt/ai` carries a table. For features with no live examples, use a temporary local post and remove it before committing.
 
-Code blocks are coloured through `syntax.*` — see [that section](#syntax--code-highlighting) for how Shiki's output is bound to the tokens. Judge a palette change against the `save-profile.ts` block on `/writing/interfaces-are-arguments` in both themes, and run `npm run check:syntax`.
+Code blocks use `syntax.*` tokens through [Shiki's CSS variables](#syntax--code-highlighting). Check palette changes against a highlighted code block in both themes and run `npm run check:syntax`.
 
 ---
 

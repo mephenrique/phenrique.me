@@ -2,6 +2,7 @@
 title: "Building software in the era of AI"
 description: "A personal reflection on professional identity, learning, and building software in the era of AI agents."
 slug: "building-software-in-the-era-of-ai"
+translationKey: "building-software-in-the-era-of-ai"
 locale: "en"
 date: "2026-11-07"
 kind: "note"
