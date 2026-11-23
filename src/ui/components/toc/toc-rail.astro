@@ -60,7 +60,6 @@ const { entries, label } = Astro.props;
       position: "absolute",
       top: "50%",
       right: "100%",
-      pr: 2,
       opacity: 0,
       pointerEvents: "none",
       transform: "translate(0.375rem, -50%)",
@@ -165,7 +164,7 @@ const { entries, label } = Astro.props;
   }
   <div
     aria-hidden="true"
-    class={css({ display: "flex", flexDirection: "column", alignItems: "flex-end", py: 10, pl: 8, pr: 5 })}
+    class={css({ display: "flex", flexDirection: "column", alignItems: "flex-end", py: 10, pl: 6, pr: 5 })}
   >
     <ol class={css({ display: "flex", flexDirection: "column" })}>
       {
