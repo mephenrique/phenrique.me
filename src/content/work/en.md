@@ -70,6 +70,6 @@ I'm a product-minded software engineer with :yoe years of experience. I take mes
 ::callout{type="insight" title="What I'm open to"}
 I do my best work on small teams and highly collaborative teams that have autonomy and ownership over what they build. The roles I'm looking for:
 
-- **Product Engineering:** Founding Engineer, Senior Product Engineer or AI Product Engineer, taking unclear business problems from discovery and domain modelling to production.
+- **Product Engineering:** Founding Engineer, Senior Product Engineer, Forward Deployed Engineer, AI Product Engineer, taking unclear business problems from discovery and domain modelling to production.
 - **Frontend Engineering:** Frontend roles centred on design systems, complex workflows, real-time performance and accessibility, with room to work across the stack when the product needs it.
 ::

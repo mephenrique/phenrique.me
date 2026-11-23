@@ -65,13 +65,11 @@ languages:
     level: "Iniciante"
 ---
 
-Sou um engenheiro de software orientado a produto, com :yoe anos de experiência. Transformo fluxos operacionais manuais e desorganizados em produtos web que as pessoas usam para tornar seu trabalho mais rápido, fácil e confiável.
-
-Minha especialidade é o frontend: design systems, arquitetura de componentes e as interfaces que as pessoas usam todos os dias. Também construo e opero o backend e a infraestrutura por trás delas, para levar uma funcionalidade do conceito à produção e mantê-la ao longo dos anos.
+Sou um engenheiro de software orientado a produto, com :yoe anos de experiência. Transformo fluxos operacionais manuais e desorganizados em produtos de software que as pessoas usam para tornar seu trabalho mais rápido, fácil e confiável.
 
 ::callout{type="insight" title="O que busco hoje"}
-Rendo melhor em times pequenos e startups, onde engenheiros têm autonomia e ownership sobre o que constroem. Os papéis que procuro:
+Rendo melhor em times pequenos e equipes altamente colaborativas que têm autonomia e ownership sobre o que constroem. Os papéis que procuro:
 
-- **Engenharia de Produto:** Founding Engineer, Senior Product Engineer ou AI Product Engineer, levando problemas de negócio pouco definidos da descoberta e modelagem de domínio até a produção.
+- **Engenharia de Produto:** Founding Engineer, Senior Product Engineer, Forward Deployed Engineer, AI Product Engineer, levando problemas de negócio pouco definidos da descoberta e modelagem de domínio até a produção.
 - **Engenharia de Frontend:** Vagas de frontend centradas em design systems, fluxos complexos, performance em tempo real e acessibilidade, com espaço para atuar em toda a stack quando o produto pedir.
 ::

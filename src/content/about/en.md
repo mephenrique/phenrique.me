@@ -29,7 +29,7 @@ In short, I build software (especially web applications), APIs, libraries, and o
 
 ## Faith: how I see the world
 
-I'm a (Protestant) Christian, and that's not a detail I tuck away from the rest of my life. My faith in Jesus shapes how I think about everything[^beliefs]. As Turek and Geisler observed (quoting Mortimer Adler), our conclusion about God bears on every other area of life — it is the key to finding ultimate meaning and the most important question any human being has to address[^geisler].
+I'm a (Protestant)[^protestantchristian] Christian, and that's not a detail I tuck away from the rest of my life. My faith in Jesus shapes how I think about everything[^beliefs]. As Turek and Geisler observed (quoting Mortimer Adler), our conclusion about God bears on every other area of life — it is the key to finding ultimate meaning and the most important question any human being has to address[^geisler].
 
 So, to go deeper into this matter, I hold a postgraduate education in Sacred Scripture from Faculdade Cidade Teológica Pentecostal. And I expect to pursue further postgraduate studies and, perhaps, even a master’s degree in theology or philosophy, because I take the life of the rational mind alongside the life of faith as two approaches to observing and interacting with reality, and they do not contradict each other; on the contrary, they complement one another.
 
@@ -58,5 +58,6 @@ Please skip bulk outreach, link exchanges, guest post offers, and SEO services. 
 [^testimonial]: Maybe this website can be a compelling testimonial of how much I care about great UI design and quality software.
 [^softwarequality]: Of all the definitions of "quality software," [Alasdair Monk's definition](https://x.com/almonk/status/2079461952577802549) is the best I've seen so far.
 [^buildingwithai]: I reflect on how AI is changing my relationship with software engineering in ["Building software in the era of AI"](/writing/building-software-in-the-era-of-ai).
+[^protestantchristian]: I emphasize that I am a Protestant Christian in order to deliberately distinguish myself from Roman Catholics, Mormons, Jehovah’s Witnesses, and other branches of groups that call themselves Christian. While I maintain respect not only for these various Christian groups but also for non-Christian groups — whether religious or otherwise —, I believe that Protestant Christianity offers the most accurate worldview regarding reality.
 [^beliefs]: If you are interested in a longer answer about my beliefs, I set out further how they shape my identity in ["What I believe and why I believe in what I believe"](/writing/what-i-believe-and-why-i-believe-in-what-i-believe).
 [^geisler]: See Norman L. Geisler and Frank Turek, [*Não Tenho Fé Suficiente para Ser Ateu*](https://www.goodreads.com/book/show/7616517-n-o-tenho-f-suficiente-para-ser-ateu).
