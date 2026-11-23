@@ -5,75 +5,58 @@ metadata:
   description: "Sobre Paulo Henrique: seu trabalho, seu ofício e sua fé."
 ---
 
-Olá, meu nome é Paulo Henrique[^name]. Sou um engenheiro de software com olhar apurado para design, de Fortaleza[^fortaleza], Brasil, atuando na interseção entre engenharia e fé.
+Meu nome é Paulo Henrique[^name], e sou um engenheiro de software de Fortaleza[^fortaleza], Brasil, atuando na interseção entre engenharia e fé. Gosto de pensar, explorar e, fundamentalmente, escrever sobre meus insights em desenvolvimento de software, ciência da computação, teologia, filosofia e outros aspectos da vida que acredito que valem a pena discutir.
 
-## Um breve histórico (acadêmico)
+## Como cheguei até aqui
 
-Embora no início eu pretendesse seguir carreira em engenharia elétrica, o "destino"[^destiny] acabou me levando a estudar ciência da computação. Nos primeiros semestres, eu não tinha certeza se era essa a carreira que queria seguir, mas tudo mudou quando conheci a programação competitiva. A partir dali, passei a dedicar a maior parte do meu tempo de estudo a resolver problemas algorítmicos.
+Embora no início eu pretendesse seguir carreira em engenharia elétrica, o "destino"[^destiny] acabou me levando a estudar ciência da computação. Nos primeiros anos, eu não tinha certeza se era essa a carreira que queria —[^ai] eu realmente sofria com lógica de programação. Mas, depois de resolver centenas de exercícios em uma plataforma de programação competitiva, a incerteza começou a desaparecer e logo deu lugar a uma paixão por programar. O resultado? Conquistei bolsa de estudos, oportunidades de estágio e a chance de participar de competições de programação.
 
-Essa paixão pelas competições moldou minha experiência na universidade, rendendo bolsas de pesquisa, oportunidades de estágio e a chance de participar de torneios de programação. Entre 2014 e 2016 disputei a Maratona de Programação Brasileira, conquistando o campeonato regional em 2016[^maratona] e chegando à final nacional no mesmo ano. No fim das contas, todas essas experiências consolidaram meu desejo de seguir carreira na engenharia de software.
+Entre 2014 e 2016 disputei a [Maratona de Programação Brasileira](https://maratona.sbc.org.br/), conquistando o campeonato regional em 2016[^maratona] e chegando à final nacional naquele mesmo ano. No fim das contas, todas essas experiências consolidaram meu desejo de seguir uma carreira profissional na engenharia de software. De fato, devo grande parte do meu conhecimento em software — e, consequentemente, minha decisão de seguir essa carreira — à minha dedicação em estudar e praticar desafios de código.
 
-No final de 2019, formei-me bacharel em Ciência da Computação pela Universidade Estadual do Ceará. Mas já em 2017 eu havia dado meus primeiros passos profissionais, ingressando como estagiário em uma empresa graças ao desempenho nas competições. O que começou nas arenas de competição acabou se tornando uma carreira construída em torno de resolver problemas reais — escrevendo código para produção, trabalhando em toda a stack e dedicando extrema atenção ao ofício de criar software de qualidade que faça a diferença para as pessoas.
+No final de 2019, formei-me bacharel em Ciência da Computação pela Universidade Estadual do Ceará. Antes disso, já em 2017, dei meus primeiros passos como desenvolvedor profissional quando ingressei em uma empresa como estagiário. Hoje, vejo que o que começou em ambientes de competição acabou se tornando uma carreira construída em torno de resolver problemas reais — escrevendo código para produção, trabalhando em toda a stack de produto e dedicando extrema atenção ao ofício de criar software de qualidade com o qual os usuários se importam.
 
-A programação competitiva me ensinou a resolver um problema que outra pessoa já havia enunciado com precisão. Quase tudo de interessante que vem desde então é o trabalho inverso: o problema chega como uma reclamação vaga de alguém que não consegue descrever o que quer, e o trabalho é transformar isso em algo exato o suficiente para ser construído.
+## O que construo
 
-## O que faço
-
-Hoje atuo como engenheiro de produto de software[^productengineer] — full-stack em abrangência[^fullstack], com profundidade no frontend. O rótulo importa para mim porque a parte deste trabalho pela qual sou efetivamente pago não é a digitação. É descobrir o que deveria existir, decidir o que significa "bom" para aquele negócio específico e aquelas pessoas específicas, e então construir bem o suficiente para que elas gostem de usar.
-
-E essa última parte não é enfeite. Há algo profundamente recompensador em criar interfaces elegantes, refinadas, bem pensadas e com experiências fluidas[^testimonial], seja em aplicações web, mobile ou desktop — e quando todo mundo consegue construir aquilo que tecnicamente funciona, aquilo que as pessoas realmente gostam de usar é o que resta para competir.
-
-Acredito que Paul Irish sintetiza muito bem minha inclinação natural pelo ofício de criar UIs:
+Hoje, atuo como engenheiro de produto de software[^productengineer], full-stack por abrangência[^fullstack], com especialidade no ecossistema de frontend: design systems, bibliotecas e frameworks de UI, arquitetura de componentes e as interfaces que as pessoas usam todos os dias. Há algo profundamente recompensador em criar interfaces de usuário bonitas, refinadas e bem pensadas[^testimonial]. Acredito que Paul Irish sintetiza muito bem minha inclinação natural pelo ofício de criá-las:
 
 ::quote{source="Paul Irish, About" href="https://www.paulirish.com/about/"}
 Criar uma interface traz uma grande responsabilidade. Em temas de nicho, a UI pode influenciar — ou até se tornar (!) — o modelo mental que as pessoas guardam sobre esses conceitos e sistemas. Ao mesmo tempo, uma UI é capaz de encantar o usuário de um jeito que o backend simplesmente não consegue... ([um dos meus exemplos favoritos](https://youtu.be/0Goz0PnhEg8?si=0pA3RZbSS2f6_MUf)).
 ::
 
-No momento, tenho desenvolvido aplicações web de alta qualidade com `Kotlin` e `TypeScript`. Busco me especializar em soluções multiplataforma e web utilizando `Jetpack Compose`, `React Native` e `React`, e tenho um entusiasmo especial por `Kotlin Multiplatform`.
+Apesar da minha especialidade no frontend, também construo e opero com confiabilidade o backend e a infraestrutura por trás das interfaces que as pessoas usam. Consigo levar uma funcionalidade do conceito à produção e, mais importante, mantê-la com qualidade[^softwarequality] ao longo dos anos — o que considero o verdadeiro teste de senioridade.
 
-Embora minha principal especialidade seja o frontend, tenho uma base sólida em sistemas de backend, o que me permite atuar com desenvoltura em toda a stack: automação, CI/CD, arquitetura de sistemas robustos e escaláveis, etc. Em resumo, desenvolvo aplicações web, APIs, bibliotecas e outras ferramentas — com ou sem IA. Recorro bastante a agentes para as partes que antes consumiam a semana inteira, justamente para que mais da semana sobre para descoberta e julgamento; a página de [IA](/pt/ai) detalha como.
+Em resumo, construo software (especialmente aplicações web), APIs, bibliotecas e outras ferramentas, aproveitando o potencial que a IA nos oferece hoje para acelerar seu desenvolvimento[^buildingwithai].
 
-Neste momento, isso se traduz em um ERP que estou construindo para a Nordeste Painéis, uma fábrica que monta e vende painéis elétricos. Antes dele, a operação rodava em planilhas, conversas de WhatsApp e na memória das pessoas que sabiam como tudo se encaixava. Não havia product manager nem especificação escrita, então o primeiro trabalho foi caminhar pelo chão de fábrica e entender o que o sistema precisava fazer de fato — como são os pedidos, em que ponto da montagem está cada painel, do que um vendedor precisa no momento exato em que está orçando. Depois eu projetei, construí e coloquei em produção. A parte interessante desse projeto nunca foi a escolha do framework. Foi chegar a uma definição de "bom" que serve para esta fábrica e não serviria para quase nenhuma outra.
+## Fé: como vejo o mundo
 
-::callout{type="insight" title="Para onde acho que isso caminha"}
-O custo de produzir código desabou, e o custo de revisar, corrigir e operar esse código está seguindo o mesmo caminho. O que não desaba é a parte que só existia na cabeça de uma pessoa: o que aquele negócio realmente precisa e o que significa "bom" para ele e para mais ninguém. Esse trabalho é específico de cada cliente e não se transfere — e é exatamente por isso que ele continua valioso.[^productengineer] Então aponto minha abrangência para lá — tecnologias e competências além da minha área central[^tshaped-1]<sup>,&nbsp;</sup>[^tshaped-2] —, porque nesta era de engenharia agêntica, quem consegue sentar com as pessoas que precisam do software e voltar com uma definição correta de "bom" é quem segue fazendo um trabalho durável.
+Sou cristão (protestante), e esse não é um detalhe que escondo do restante da minha vida. Minha fé em Jesus orienta a forma como penso sobre tudo[^beliefs]. Como Turek e Geisler observaram (citando Mortimer Adler), a conclusão a que chegamos sobre Deus afeta todas as outras áreas da vida — é a chave para encontrar o sentido último das coisas e a pergunta mais importante que qualquer ser humano precisa responder[^geisler].
+
+Por isso, para me aprofundar nessa área, cursei pós-graduação em Sagradas Escrituras pela Faculdade Cidade Teológica Pentecostal. E pretendo seguir com novos estudos de pós-graduação e, quem sabe, até um mestrado em teologia ou filosofia, porque encaro a vida da mente racional lado a lado com a vida de fé como duas abordagens para observar e interagir com a realidade — e elas não se contradizem; pelo contrário, complementam-se.
+
+No entanto, meu interesse pelo conhecimento teológico e filosófico não significa que eu pretenda me tornar um intelectual ou pesquisador no sentido acadêmico (talvez em um futuro distante?). Na verdade, é apenas uma inclinação da vontade que me faz desejar conhecer melhor a realidade. Acredito que refletir sobre a vida pelas lentes da Bíblia me ajuda a compreender a mim mesmo, a vida das outras pessoas e meu relacionamento com elas, o mundo em que vivemos e, principalmente, como tudo isso se encaixa no plano de Deus para a vida.
+
+## Longe do código
+
+Quando não estou programando, você vai me encontrar escrevendo alguma coisa (principalmente neste site), passando tempo com minha família e amigos, servindo na minha comunidade de fé, treinando na academia, lendo um livro, jogando xadrez ou tocando violão ou teclado por aí com meus parceiros de banda.
+
+## Entre em contato
+
+A forma mais confiável de falar comigo é por [e-mail](mailto:pauloh1288@gmail.com). Leio tudo e costumo responder à maioria das mensagens em poucos dias. Estou no [GitHub](https://github.com/mephenrique), que é o lugar certo para abrir uma issue de bug ou enviar um pull request em qualquer projeto que eu mantenha. Também estou no [X](https://x.com/mephenrique) e no [LinkedIn](https://www.linkedin.com/in/mephenrique/). Se quiser acompanhar momentos mais informais e não técnicos, fique à vontade para me seguir no [Instagram](https://www.instagram.com/mephenrique).
+
+::callout{type="warning" title="Antes de entrar em contato"}
+Por favor, evite mensagens genéricas em massa, troca de links, propostas de guest post e serviços de SEO. Não aceito parcerias pagas nem links patrocinados em nenhum lugar deste site.
 ::
 
-## Somos todos crentes
 
-Sou cristão protestante, e essa não é uma dimensão isolada do restante da minha vida. Minha fé em Deus e em seu filho Jesus orienta a maneira como penso sobre tudo: meu trabalho, como me relaciono com as pessoas e para que afinal serve a tecnologia. Como observou Mortimer Adler, a conclusão a que chegamos sobre Deus afeta todas as outras áreas da vida — é a chave para encontrar o sentido último das coisas e a pergunta mais importante que qualquer ser humano pode encarar.[^geisler]
-
-Para contextualizar, sou pós-graduado em Sagradas Escrituras pela FCTP. Isso reflete o quanto levo a sério a vida da mente racional lado a lado com a vida de fé. Minha intenção não é me tornar um teólogo no sentido acadêmico, mas acredito que compreender bem a Bíblia me ajuda a entender a mim mesmo, ao próximo, ao mundo em que vivemos e à maneira como tudo se relaciona dentro do Reino de Deus.
-
-::callout{type="note" title="Para uma resposta mais detalhada"}
-Expliquei minhas convicções e como elas moldam minha identidade no texto ["No que creio e por que creio no que creio"](/writing/what-i-believe-and-why-i-believe-in-what-i-believe).
-::
-
-## Quando não estou programando
-
-Quando não estou programando, você me encontrará escrevendo alguma coisa (principalmente neste site), passando tempo com minha família e amigos, servindo na minha comunidade de fé como professor bíblico e líder musical, treinando na academia, lendo um livro, jogando xadrez ou tocando violão ou teclado por aí com meus amigos de banda.
-
-::callout{type="info" title="Este site"}
-Este site é construído com [Astro](https://astro.build) e hospedado na [Vercel](https://vercel.com). Se quiser saber mais sobre como ele foi feito, confira a página [Colophon](/pt/colophon).
-::
-
-## Contato
- 
-A forma mais confiável de falar comigo é por [e-mail](mailto:pauloh1288@gmail.com). Leio tudo e costumo responder à maioria das mensagens em poucos dias. Não há formulário de contato neste site por uma razão intencional: formulário exige banco de dados, e um site pessoal não tem por que manter um.
- 
-Além disso, estou no [GitHub](https://github.com/mephenrique) como mephenrique — o lugar ideal para reports de bugs ou enviar pull requests em projetos que mantenho. Também estou no [X](https://x.com/mephenrique) e no [LinkedIn](https://www.linkedin.com/in/mephenrique/). Se quiser acompanhar conteúdos mais informais, não técnicos e do dia a dia, você também pode me seguir no [Instagram](https://www.instagram.com/mephenrique).
-
-::callout{type="warning" title="Vale a pena escrever"}
-Por favor, evite mensagens genéricas em massa, troca de links, ofertas de guest posts e serviços de SEO. Não aceito parcerias pagas nem links patrocinados em nenhum lugar deste site.
-::
-
-[^name]: Algumas pessoas me chamam de "Paulo", "Henrique", "Paulinho", "Rique" (minha irmã) e, com mais frequência, "PH".
+[^name]: As pessoas me chamam de "Paulo", "Henrique", "Paulinho", "Rique" e, com mais frequência, "PH".
 [^fortaleza]: No litoral do [Ceará, no Nordeste do Brasil](https://maps.app.goo.gl/YbP1zDmW3U7A9MuBA) — fuso horário GMT−3.
-[^destiny]: Prestei vestibular para engenharia elétrica três vezes e não passei.
-[^maratona]: [Maratona de Programação, resultados da regional de 2016](https://www.facebook.com/maratona/posts/10154135897899118:0).
-[^productengineer]: Laurie Voss, ["We are all Product Engineers now"](https://seldo.com/posts/we-are-all-product-engineers-now/), que defende o argumento melhor do que eu conseguiria: à medida que o custo de escrever código desaba, o que resta é descobrir o que as pessoas realmente querem, definir isso com precisão e tornar o uso agradável.
-[^fullstack]: Com todo o afeto — e toda a desconfiança — que o meme de "full stack" no Twitter conquistou.
-[^testimonial]: Talvez este site seja um bom testemunho de quanto valorizo bom design e software de qualidade.
-[^tshaped-1]: Paulo Silveira, ["Vibecoding, hipsters e o novo dev"](https://paulo.com.br/blog/vibecoding-hipsters-novo-dev/).
-[^tshaped-2]: Spotify Engineering, ["Why you should pair with non-engineers"](https://engineering.atspotify.com/2021/03/why-you-should-pair-with-non-engineers).
-[^geisler]: Norman L. Geisler e Frank Turek, *Não Tenho Fé Suficiente para Ser Ateu*, p. 33.
+[^destiny]: Inicialmente, eu queria cursar engenharia elétrica, então prestei vestibular para o curso de Engenharia Elétrica na Universidade Federal do Ceará (UFC) três vezes, mas não passei. Curiosamente, na minha última tentativa de entrar na UFC, também decidi me inscrever para o curso de Ciência da Computação na Universidade Estadual do Ceará (UECE) — mesmo sem ter ideia do que o curso realmente envolvia (imaginava que tivesse algo a ver com computadores em geral; nunca imaginei que se tratava de programação de software). Escolhi simplesmente por pertencer à área de "ciências exatas", que é a área pela qual tenho atração natural. Para minha surpresa, acabei sendo classificado na lista de espera da UECE e consegui uma vaga no curso de Ciência da Computação.
+[^ai]: Não era para eu precisar dizer isso, mas os travessões aqui não significam que este texto foi escrito por IA. Com o surgimento dos LLMs (Modelos de Linguagem Grandes), [boa parte dos textos gerados por IA contém travessões](https://togetherlearning.com/research/2025/assets/files/Hawkinson-EmDash-20251204.pdf), destoando do padrão habitual da escrita humana informal ou não acadêmica. No entanto, o travessão já existia muito antes da IA, e gosto de usá-lo para deixar minha escrita mais clara. Se quiser saber mais sobre como utilizo IA, confira a página sobre [IA](/pt/ai).
+[^maratona]: Foi uma excelente experiência! Você pode conferir um dos destaques desse evento [aqui](https://www.facebook.com/maratona/posts/10154135897899118:0).
+[^productengineer]: Veja Laurie Voss, ["We are all Product Engineers now"](https://seldo.com/posts/we-are-all-product-engineers-now/). Ele defende o argumento melhor do que eu conseguiria: à medida que o custo de escrever código desaba com o avanço dos agentes de IA, o que resta é descobrir o que as pessoas realmente querem, definir isso com precisão e tornar o uso agradável.
+[^fullstack]: Por "full-stack", refiro-me à responsabilidade de ponta a ponta: do banco de dados ao pipeline pós-deploy — Postgres, Spring Boot, UI/UX, CI/CD, Observabilidade e tudo o mais necessário para que uma aplicação ou serviço funcione de forma confiável. Naturalmente, dado que minha principal especialidade é o desenvolvimento frontend, essas aplicações tendem a apresentar um nível de qualidade ainda maior nesse domínio específico da stack, sem, contudo, comprometer o alto padrão de qualidade nas demais áreas (embora eu tenha plena consciência de que desenvolvedores "full-stack" sempre serão assombrados pelo [meme](https://x.com/swyx/status/1432848799353819138) que acompanha esse [título](https://x.com/Falkowski/status/1118320260854140929)).
+[^testimonial]: Talvez este site seja um bom testemunho de quanto valorizo ótimo design de interface e software de qualidade.
+[^softwarequality]: De todas as definições de "software de qualidade", a de [Alasdair Monk](https://x.com/almonk/status/2079461952577802549) é a melhor que vi até hoje.
+[^buildingwithai]: Reflito sobre como a IA está transformando minha relação com a engenharia de software em ["Construindo software na era da IA"](/writing/building-software-in-the-era-of-ai).
+[^beliefs]: Se você estiver interessado em uma resposta mais longa sobre minhas convicções, detalho como elas moldam minha identidade no texto ["No que creio e por que creio no que creio"](/writing/what-i-believe-and-why-i-believe-in-what-i-believe).
+[^geisler]: Veja Norman L. Geisler e Frank Turek, [*Não Tenho Fé Suficiente para Ser Ateu*](https://www.goodreads.com/book/show/7616517-n-o-tenho-f-suficiente-para-ser-ateu).
