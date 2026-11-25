@@ -29,12 +29,6 @@ Increasingly the reader here is not a person with a browser. It is an agent fetc
 
 That seemed like a poor way to treat a reader, so every document page on this site has a plain-Markdown twin at its own address with `.md` appended. Each has a Portuguese counterpart under `/pt`. [/llms.txt](/llms.txt) indexes them all, and the design system is published verbatim at [/design.md](/design.md).
 
-Three details matter more than the URLs:
-
-- **The Markdown is composed from the source, not scraped from the page.** Articles are Markdown in the repository to begin with. The structured pages — work, reading — are rebuilt from the same content entries and the same translation dictionaries the visual page reads, so a stack table arrives as a list and a rating arrives as a number, rather than as a paragraph of orphaned words.
-- **Every document opens with frontmatter**: title, description, canonical source URL, locale, publication date, and the addresses of its translations. An agent should not have to read an essay to find out what it is, and the source URL travels with the text once it has been copied somewhere else.
-- **It is discoverable without guessing.** Each page carries a `<link rel="alternate" type="text/markdown">` pointing at its twin, and `robots.txt` names the index.
-
 This costs me almost nothing and saves a machine from parsing a stylesheet to find a sentence. If you are building something that reads this site, start at [/llms.txt](/llms.txt).
 
 ## Training and the open web
