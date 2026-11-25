@@ -3,6 +3,7 @@ metadata:
   title: "Work"
   description: "Product engineering from the first conversation with users to software running in production: experience, projects, stack and education."
 
+availability: "Open to work"
 resumeURL: "https://resume.phenrique.me/cv.pdf"
 
 highlights:
@@ -67,8 +68,8 @@ languages:
 
 I'm a product-minded software engineer with :yoe years of experience. I take messy, manual operational workflows and turn them into software products people can use to make their work faster, easier, and more reliable.
 
-::callout{type="insight" title="What I'm open to"}
-I do my best work on small teams and highly collaborative teams that have autonomy and ownership over what they build. The roles I'm looking for:
+::callout{type="note" title="Where I do my best work"}
+I do my best work on small teams and highly collaborative teams that have autonomy and ownership over what they build. The roles that fit me best:
 
 - **Product Engineering:** Founding Engineer, Senior Product Engineer, Forward Deployed Engineer, AI Product Engineer, taking unclear business problems from discovery and domain modelling to production.
 - **Frontend Engineering:** Frontend roles centred on design systems, complex workflows, real-time performance and accessibility, with room to work across the stack when the product needs it.

@@ -3,6 +3,7 @@ metadata:
   title: "Trabalho"
   description: "Engenharia de produto da primeira conversa com os usuários ao software rodando em produção: experiência, projetos, stack e formação."
 
+availability: "Aberto a oportunidades"
 resumeURL: "https://resume.phenrique.me/cv.pdf"
 
 highlights:
@@ -67,8 +68,8 @@ languages:
 
 Sou um engenheiro de software orientado a produto, com :yoe anos de experiência. Transformo fluxos operacionais manuais e desorganizados em produtos de software que as pessoas usam para tornar seu trabalho mais rápido, fácil e confiável.
 
-::callout{type="insight" title="O que busco hoje"}
-Rendo melhor em times pequenos e equipes altamente colaborativas que têm autonomia e ownership sobre o que constroem. Os papéis que procuro:
+::callout{type="note" title="Onde rendo melhor"}
+Rendo melhor em times pequenos e equipes altamente colaborativas que têm autonomia e ownership sobre o que constroem. Os papéis em que mais me encaixo:
 
 - **Engenharia de Produto:** Founding Engineer, Senior Product Engineer, Forward Deployed Engineer, AI Product Engineer, levando problemas de negócio pouco definidos da descoberta e modelagem de domínio até a produção.
 - **Engenharia de Frontend:** Vagas de frontend centradas em design systems, fluxos complexos, performance em tempo real e acessibilidade, com espaço para atuar em toda a stack quando o produto pedir.

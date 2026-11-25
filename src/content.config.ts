@@ -196,6 +196,7 @@ const work = defineCollection({
       title: z.string(),
       description: z.string(),
     }),
+    availability: z.string().optional(),
     resumeURL: z.string(),
     highlights: z.array(
       z.object({

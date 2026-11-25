@@ -66,7 +66,7 @@ const sectionGap = css.raw({ mt: { base: 14, md: 16 } });
 >
   <Container>
     {/* Same opening as /reading and /writing: the three pages share a shell. */}
-    <div class={vstack({ mt: 32, alignItems: "stretch", gap: 8 })}>
+    <div class={css({ mt: 32 })}>
       <h1
         class={"fraunces-font " +
           css({
@@ -94,10 +94,47 @@ const sectionGap = css.raw({ mt: { base: 14, md: 16 } });
       class={"prose " + css({ mt: 6, "& > :not([data-prose-block])": { maxW: "var(--prose-measure)" } })}
     />
 
-    <div class={css({ mt: 8 })}>
+    {
+      /*
+      Availability sits beside the résumé link: the reader has just finished
+      the summary and the callout, so the status lands where they decide to act
+      on it, and the title row stays identical to the sibling pages. It is the
+      author's state, not a tag on the page, so it is a dot and plain text — a
+      filled pill would read as a category, like a genre or a Draft badge.
+    */
+    }
+    <div class={css({ mt: 8, display: "flex", flexWrap: "wrap", alignItems: "center", columnGap: 5, rowGap: 3 })}>
       <ButtonLink href={page.data.resumeURL} variant="primary" icon="arrow" external>
         {dict["resume-cta"]}
       </ButtonLink>
+      {
+        page.data.availability && (
+          <p
+            class={css({
+              display: "flex",
+              alignItems: "center",
+              gap: 2.5,
+              fontSize: "sm",
+              lineHeight: "1.25rem",
+              fontWeight: "medium",
+              color: "text.secondary",
+            })}
+          >
+            <span
+              aria-hidden="true"
+              class={css({
+                flexShrink: 0,
+                w: "7px",
+                h: "7px",
+                borderRadius: "full",
+                bg: "status.success",
+                boxShadow: "0 0 0 3px color-mix(in oklab, token(colors.status.success) 18%, transparent)",
+              })}
+            />
+            {page.data.availability}
+          </p>
+        )
+      }
     </div>
 
     {

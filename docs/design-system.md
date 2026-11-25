@@ -221,7 +221,7 @@ The translucent ones are deliberate exceptions to "use a ramp step": a stroke th
 
 | Token            | Light          | Dark                 | Use for         |
 | ---------------- | -------------- | -------------------- | --------------- |
-| `status.success` | `signal.green` | `signal.greenBright` | diff insertions |
+| `status.success` | `signal.green` | `signal.greenBright` | diff insertions, availability dot (/work) |
 | `status.danger`  | `signal.red`   | `signal.redBright`   | diff deletions  |
 | `status.rating`  | `ochre.500`    | `ochre.400`          | filled stars    |
 

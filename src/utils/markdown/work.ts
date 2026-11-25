@@ -46,7 +46,8 @@ export function renderWorkBody({ page, experience, projects, dict, locale }: Wor
 
   const sections: string[] = [
     page.body ?? "",
-    `[${dict["resume-cta"]}](${page.data.resumeURL})`,
+    // The view puts the availability status beside the résumé link; same row here.
+    metaLine([`[${dict["resume-cta"]}](${page.data.resumeURL})`, page.data.availability]),
     section(
       dict.sections.highlights,
       page.data.highlights.map((h) => `- **${h.title}** — ${h.description}`).join("\n"),
