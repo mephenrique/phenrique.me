@@ -1,0 +1,255 @@
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
+import { glob } from "astro/loaders";
+import { WRITING_KINDS } from "./utils/writing-kinds.ts";
+
+const homePages = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/home" }),
+  schema: z.object({
+    title: z.string(),
+    /**
+     * Head metadata, kept apart from `title` because the two want different
+     * words here: the heading is the name on its own, while the `<title>` has
+     * to say what the person does for the result to be worth clicking. Every
+     * other page's heading doubles as its title, so only this one splits them.
+     */
+    metadata: z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+  }),
+});
+
+const aboutPages = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/about" }),
+  schema: z.object({
+    title: z.string(),
+    bioImageResource: z.string(),
+    /**
+     * Description only: the page's `title` is a tagline that already reads as
+     * a `<title>`, and at 59 characters it opts out of the site-name suffix on
+     * its own. The description was hardcoded in English in the view, so `/pt`
+     * shipped it untranslated.
+     */
+    metadata: z.object({
+      description: z.string(),
+    }),
+  }),
+});
+
+/** Shape of a standalone long-form page: a heading and a body of prose. */
+const longformPage = z.object({
+  title: z.string(),
+  description: z.string(),
+});
+
+const colophonPages = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/colophon" }),
+  schema: longformPage,
+});
+
+/**
+ * `/ai`. Split out of the colophon, which had grown a section on AI large
+ * enough to bury the typography and the stack around it — and which the about
+ * page already linked to as if it were its own page.
+ */
+const aiPages = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/ai" }),
+  schema: longformPage,
+});
+
+const writing = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/writing" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    slug: z.string(),
+    locale: z.enum(["en", "pt"]),
+    date: z.coerce.date(),
+    draft: z.boolean().optional(),
+    /**
+     * `article` is a comprehensive piece; `note` is a short, single-thought
+     * post — longer than a tweet, shorter than an argument. The writing index
+     * filters on it (`/writing/articles`, `/writing/notes`). Defaults to
+     * `article` so a post only says so when it is the exception.
+     */
+    kind: z.enum(WRITING_KINDS).default("article"),
+    /**
+     * Shared by the two files of one article, one per locale. Slugs are
+     * translated too, so this is the only thing tying a pair together — see
+     * `postAlternates` in `src/utils/content.ts`. A post with no translation
+     * leaves it unset.
+     */
+    translationKey: z.string().optional(),
+    /**
+     * Social card for this post, as a site-absolute path. Falls back to the
+     * site-wide card in `head.astro` when unset.
+     */
+    image: z.string().optional(),
+  }),
+});
+
+/**
+ * One professional role. The body is the markdown bullet list of what the role
+ * involved, rendered through the `.prose` layer.
+ *
+ * `dateEnd` is nullable rather than the string "Current": the label for an
+ * ongoing role is copy, and copy belongs in a dictionary the page can localise.
+ * `arrangement` is a key for the same reason — the YAML says `hybrid`, the
+ * dictionary decides whether that reads "Hybrid" or "Híbrido".
+ */
+const workExperience = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/work-experience" }),
+  schema: z.object({
+    company: z.string(),
+    companyURL: z.string().optional(),
+    role: z.string(),
+    location: z.string().optional(),
+    arrangement: z.enum(["on-site", "hybrid", "remote"]),
+    dateStart: z.coerce.date(),
+    dateEnd: z.coerce.date().nullable(),
+  }),
+});
+
+const projects = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/projects" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    /** Short line for the project card; `description` is the longer page/RSS one. */
+    tagline: z.string(),
+    date: z.coerce.date(),
+    draft: z.boolean().optional(),
+    demoURL: z.string().optional(),
+    repoURL: z.string().optional(),
+    /** Typographic mark for the card's logo well, split into coloured segments. */
+    wordmark: z
+      .object({
+        segments: z.array(
+          z.object({
+            text: z.string(),
+            color: z.enum(["blue", "green", "yellow"]),
+          }),
+        ),
+      })
+      .optional(),
+  }),
+});
+
+const linkbioPages = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/linkbio" }),
+  schema: z.object({
+    metadata: z.object({
+      description: z.string(),
+    }),
+    bio_section: z.object({
+      description: z.string(),
+    }),
+  }),
+});
+
+const socialLinks = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/social-links" }),
+  schema: z.object({
+    name: z.string(),
+    handle: z.string(),
+    link: z.string(),
+    logo_url: z.string(),
+    icon: z.string().optional(),
+  }),
+});
+
+const books = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/books" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().nullable(),
+    status: z.enum(["reading", "finished"]),
+    genres: z.array(z.string()),
+    authors: z.array(z.string()),
+    finished_date: z.coerce.date().nullable(),
+    last_update: z.coerce.date().nullable(),
+    progress: z.number(),
+    rating: z.number(),
+    cover: z.object({
+      url_path: z.string(),
+      alt: z.string(),
+      width: z.number(),
+      height: z.number(),
+    }),
+  }),
+});
+
+/**
+ * Everything on /work that is a list of fields rather than prose: the
+ * highlights grid, the stack table, education and languages. The markdown body
+ * is the page's opening summary, which is the one part that reads as writing.
+ *
+ * Kept as one file per locale rather than a collection per section — these are
+ * facets of a single page, and splitting them would mean four collections that
+ * are only ever read together.
+ */
+const work = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/work" }),
+  schema: z.object({
+    metadata: z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+    availability: z.string().optional(),
+    resumeURL: z.string(),
+    highlights: z.array(
+      z.object({
+        // Key into the glyph set in `work-icon.astro`, not an asset path.
+        icon: z.enum(["code", "layers", "lightbulb", "graduation", "heart", "users", "package"]),
+        title: z.string(),
+        description: z.string(),
+      }),
+    ),
+    stack: z.array(
+      z.object({
+        label: z.string(),
+        items: z.array(z.string()),
+      }),
+    ),
+    education: z.array(
+      z.object({
+        degree: z.string(),
+        institution: z.string(),
+        location: z.string(),
+        period: z.string(),
+      }),
+    ),
+    languages: z.array(
+      z.object({
+        name: z.string(),
+        level: z.string(),
+      }),
+    ),
+  }),
+});
+
+const readingPages = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.yaml", base: "./src/content/reading" }),
+  schema: z.object({
+    metadata: z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+  }),
+});
+
+export const collections = {
+  writing,
+  workExperience,
+  projects,
+  linkbioPages,
+  socialLinks,
+  books,
+  readingPages,
+  work,
+  homePages,
+  aboutPages,
+  colophonPages,
+  aiPages,
+};

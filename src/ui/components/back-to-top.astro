@@ -1,0 +1,79 @@
+---
+import { css } from "../../../styled-system/css";
+import { dictionaryFor } from "../../utils/comark";
+
+interface Props {
+  /** Drives the label; falls back to the page's own locale. */
+  locale?: string;
+}
+
+const label = dictionaryFor(Astro.props.locale ?? Astro.currentLocale ?? "en")["top-label"];
+---
+
+{
+  /*
+  The way back once the article ends.
+
+  A plain fragment link to the `main` landmark rather than a scripted scroll:
+  the browser animates it with the page's own `scroll-behavior`, drops to an
+  instant jump under reduced motion, and moves the sequential focus point with
+  it — so a keyboard reader carries on from the top of the page instead of from
+  the footer. `#main` is already there for the skip link.
+
+  Pinned to the reading measure with `prose-column`, so it lines up with the
+  text it follows rather than with the wider container a figure can reach.
+*/
+}
+<div
+  class={`prose-column ${css({
+    mt: 16,
+    pt: 5,
+    borderTop: "1px solid token(colors.border.hairline)",
+    display: "flex",
+    justifyContent: "flex-end",
+  })}`}
+>
+  <a
+    href="#main"
+    class={`group ${css({
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 2,
+      // Negative margin pulls the padded hit area back to the text edge.
+      px: 1.5,
+      mr: -1.5,
+      py: 1,
+      borderRadius: "sm",
+      fontSize: "sm",
+      color: "text.muted",
+      textDecoration: "none",
+      transition: "color 0.15s ease-in-out",
+      _hover: { color: "text.primary" },
+      _focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" },
+    })}`}
+  >
+    <!-- lucide `arrow-up`. The nudge on hover states the direction before the words do. -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+      class={css({
+        transition: "transform 0.2s ease-in-out",
+        _groupHover: { transform: "translateY(-2px)" },
+        _motionReduce: { transition: "none", _groupHover: { transform: "none" } },
+      })}
+    >
+      <path d="m5 12 7-7 7 7"></path>
+      <path d="M12 19V5"></path>
+    </svg>
+    {label}
+  </a>
+</div>

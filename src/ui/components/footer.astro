@@ -1,0 +1,87 @@
+---
+import { css } from "../../../styled-system/css";
+import { container } from "../../../styled-system/patterns";
+import LatestCommit from "./latest-commit.astro";
+import { SITE } from "../../consts.ts";
+import type { MainDictionary } from "../../i18n/main/en.ts";
+
+interface Props {
+  lang: string;
+  dict: MainDictionary;
+}
+
+const { lang, dict } = Astro.props;
+
+const currentYear = new Date().getFullYear();
+const prefix = lang === "pt" ? "/pt" : "";
+
+const links = [
+  { href: `${prefix}/ai`, label: dict.footer["ai-label"] },
+  { href: `${prefix}/colophon`, label: dict.footer["colophon-label"] },
+];
+
+const linkClass = css({
+  py: 1,
+  color: "text.muted",
+  textDecoration: "underline",
+  textUnderlineOffset: "3px",
+  textDecorationColor: "border.underline",
+  transition: "color 0.15s ease-in-out, text-decoration-color 0.15s ease-in-out",
+  _hover: { color: "text.primary", textDecorationColor: "border.underlineHover" },
+  borderRadius: "sm",
+  _focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" },
+});
+
+// Each label keeps its own separator, and only the separator-plus-label pair is
+// unbreakable. With one link the line behaved like a single word; with two it
+// would have overflowed the narrowest phones instead of wrapping.
+const unitClass = css({ whiteSpace: "nowrap" });
+const separatorClass = css({ mx: 1.5, color: "text.faint" });
+
+// Two units that never wrap inside themselves, so the row can only break
+// between them: side by side when they fit, stacked when they don't. No
+// breakpoint, which keeps it correct for any translation or commit label.
+const innerContainerClass = css(
+  container.raw({
+    w: "full",
+    px: { base: 5, md: 6 },
+    maxWidth: { base: "full", sm: "2xl", lg: "3xl" },
+  }),
+  {
+    py: 6,
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    // Baseline, not center: Geist and Geist Mono sit differently in their line boxes.
+    alignItems: "baseline",
+    columnGap: 6,
+    rowGap: 1.5,
+    fontSize: "xs",
+    lineHeight: "normal",
+    color: "text.muted",
+  },
+);
+---
+
+<footer>
+  <div class={innerContainerClass}>
+    <p>
+      <span class={unitClass}>{`© ${currentYear} ${SITE.NAME}`}</span>
+      {
+        links.map((link) => (
+          <span class={unitClass}>
+            <span aria-hidden="true" class={separatorClass}>
+              &middot;
+            </span>
+            <a href={link.href} class={linkClass}>
+              {link.label}
+            </a>
+          </span>
+        ))
+      }
+    </p>
+    <div>
+      <LatestCommit lang={lang} dict={dict} />
+    </div>
+  </div>
+</footer>

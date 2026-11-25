@@ -1,0 +1,127 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+
+import MainLayout from "../../layouts/main-layout.astro";
+import Container from "../../ui/components/container.astro";
+import FormattedDate from "../../ui/components/formatted-date.astro";
+import BackToPrev from "../../ui/components/back-to-prev.astro";
+import Markdown from "../../ui/components/markdown.astro";
+import BackToTop from "../../ui/components/back-to-top.astro";
+import { readingTimeMinutes } from "../../utils/helpers.ts";
+import { postAlternates } from "../../utils/content.ts";
+import { SITE } from "../../consts.ts";
+import { css } from "../../../styled-system/css";
+import DraftBadge from "./_components/draft-badge.astro";
+import type { WritingDictionary } from "../../i18n/writing/types.ts";
+
+interface Props {
+  post: CollectionEntry<"writing">;
+  /** Href of the article index this post belongs to. */
+  indexHref: string;
+  dict: WritingDictionary;
+}
+
+const { post, indexHref, dict } = Astro.props;
+const locale = post.data.locale;
+
+const alternates = postAlternates(await getCollection("writing"), post);
+
+// `BlogPosting` rather than the broader `Article`: every entry in this
+// collection is a dated post on a personal site, which is what the narrower
+// type describes. `inLanguage` matters here — the same article exists twice.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  inLanguage: locale,
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+  author: {
+    "@type": "Person",
+    name: SITE.NAME,
+    url: new URL("/about/", Astro.site).href,
+  },
+};
+---
+
+<MainLayout
+  title={post.data.title}
+  description={post.data.description}
+  lang={locale}
+  image={post.data.image}
+  alternates={alternates}
+  ogType="article"
+  publishedTime={post.data.date}
+  jsonLd={jsonLd}
+>
+  {
+    /*
+    Wider than the site default so the article's `wide` grid track — figures,
+    tables, code — has somewhere to go. The prose column inside stays at
+    `--prose-measure`, and the header below is pinned to the same measure with
+    `prose-column` so the title lines up with the text it introduces.
+  */
+  }
+  <Container styles={css.raw({ py: { base: 24, sm: 32 }, maxWidth: { base: "full", sm: "3xl", lg: "5xl" } })}>
+    <div class={`animate ${css({ maxWidth: "var(--prose-measure)", marginInline: "auto" })}`}>
+      <BackToPrev href={indexHref} label={dict["back-to-index"]} />
+    </div>
+    <div class={`prose-column ${css({ "& > * + *": { mt: 2 }, my: 10 })}`}>
+      <div class={`animate ${css({ display: "flex", alignItems: "center", gap: 1.5, color: "text.muted" })}`}>
+        <div class={css({ fontSize: "sm" })}>
+          <FormattedDate date={post.data.date} />
+        </div>
+        {
+          post.data.kind === "note" && (
+            <>
+              &bull; <div class={css({ fontSize: "sm" })}>{dict.kinds.note.singular}</div>
+            </>
+          )
+        }
+        {
+          post.data.draft && (
+            <>
+              &bull; <DraftBadge label={dict["draft-label"]} />
+            </>
+          )
+        }
+        {
+          /* A note is read in under a minute by definition; "1 min read" says nothing. */
+          post.data.kind !== "note" && (
+            <>
+              &bull;
+              <div class={css({ fontSize: "sm" })}>
+                {readingTimeMinutes(post.body ?? "")}&nbsp;{dict["reading-time"]}
+              </div>
+            </>
+          )
+        }
+      </div>
+      {
+        /*
+        `4xl`, matching the about and home titles: the `.prose` scale tops out at
+        1.75rem for a body `#`, and a title the article can outrank is not a
+        title. At `3xl` it led its own `##` sections by six pixels, which is not
+        a hierarchy.
+      */
+      }
+      <h1
+        class={`animate fraunces-font ${css({
+          fontSize: "4xl",
+          fontWeight: "semibold",
+          lineHeight: "1.2",
+          letterSpacing: "-0.015em",
+          textWrap: "balance",
+          color: "text.primary",
+        })}`}
+      >
+        {post.data.title}
+      </h1>
+    </div>
+    <article>
+      <Markdown body={post.body} class="prose prose-longform" locale={locale} toc />
+    </article>
+    <BackToTop locale={locale} />
+  </Container>
+</MainLayout>

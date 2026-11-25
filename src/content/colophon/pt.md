@@ -1,0 +1,47 @@
+---
+title: "Colofão"
+description: "Como este site é feito: tipografia, sistema de design e a engenharia por trás dele."
+---
+
+Um colofão é uma nota editorial — uma tradição da tipografia e da produção de livros que descreve como uma obra foi concebida, composta e fabricada. Esta página detalha as decisões estéticas, a infraestrutura técnica e os limites éticos que dão forma a este site.
+
+## Tipografia
+
+Uma boa tipografia é a espinha dorsal de uma leitura confortável e atenta. Este espaço combina famílias tipográficas servidas diretamente pela infraestrutura de fontes do Astro, garantindo privacidade por padrão, zero rastreamento de terceiros e ausência de saltos visuais (*layout shifts*):
+
+- **Fraunces**: Utilizada em títulos de destaque e nomes de artigos. Uma serifa variável inspirada nos tipos do início do século XX, ajustada com eixos variáveis para um toque acolhedor e orgânico (`SOFT: 100`, `WONK: 1`).
+- **Geist**: A tipografia principal para todo o corpo de texto, navegação e prosa. Desenhada com foco em legibilidade, precisão e ritmo geométrico.
+- **Geist Mono**: Usada em blocos de código, hashes de commits, etiquetas de metadados e elementos técnicos.
+- **Instrument Serif**: Reservada para momentos editoriais sutis e clássicos.
+
+## Design & Sistema de Cores
+
+A estética deste site se apoia em materiais táteis e na sensação de papel, evitando telas digitais frias ou genéricas.
+
+- **Fundo e textura**. No tema claro, uma textura fina de papel aparece sobre um fundo branco levemente quente. No escuro, os cartões ficam um tom acima do fundo grafite. O azul-cobalto identifica links, o foco do teclado e a página atual.
+- **Tokens Semânticos**: Cada cor é expressa por papéis semânticos via Panda CSS (`bg.*`, `text.*`, `border.*`, `accent.*`, `status.*`). Nenhum valor hexadecimal fixo ou transparência avulsa é utilizado nos componentes.
+- **Contraste Acessível**: Títulos e corpos de texto respeitam os padrões WCAG AA, com indicadores de foco desenhados especificamente com `border.focus` para navegação acessível por teclado.
+
+Para quem tiver interesse técnico nas especificações completas de tokens, a documentação do sistema está publicada na íntegra em [/design.md](/design.md).
+
+## Engenharia & Stack
+
+Este site é pré-renderizado estaticamente, priorizando velocidade instantânea, durabilidade e o mínimo indispensável de JavaScript no cliente:
+
+- **Framework**: [Astro](https://astro.build), operando em modo de saída estática.
+- **Estilos**: [Panda CSS](https://panda-css.com), gerando CSS em tempo de compilação sem impacto em tempo de execução.
+- **Conteúdo & Markdown**: Astro Content Layer com Markdown processado e renderizado por [Comark](https://comark.dev).
+- **Hospedagem**: Distribuído globalmente na [Vercel](https://vercel.com).
+- **Métricas**: Estatísticas com foco em privacidade, sem cookies de rastreamento ou identificação invasiva.
+
+## Inteligência Artificial
+
+Onde a IA é usada neste site, onde não é, e como estas páginas foram feitas para serem lidas por agentes, está em uma página própria: [IA](/pt/ai).
+
+Em resumo: a prosa é inteiramente de autoria humana, e cada documento daqui também é publicado em Markdown puro, para máquinas que preferem não interpretar uma folha de estilos.
+
+## Direitos & Citações
+
+Todo o conteúdo deste site é obra intelectual de Paulo Henrique.
+
+Citações de trechos com a devida atribuição e link para o original são sempre bem-vindas e encorajadas. Republicações integrais, traduções ou uso comercial dependem de autorização prévia por escrito.

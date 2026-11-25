@@ -1,5 +1,109 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Astro Nano - Project Context
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+Astro Nano is a static, minimalist, and lightweight portfolio and blog theme built with Astro, Comark, and TypeScript. It is designed for high performance (100/100 Lighthouse score), responsiveness, and accessibility.
+
+## 🛠 Technology Stack
+
+- **Framework:** [Astro](https://astro.build/) (v7+)
+- **Styling:** [Panda CSS](https://panda-css.com/) (Modern CSS-in-JS/Build-time CSS)
+- **Content:** Astro Content Layer. Markdown is parsed and rendered by [Comark](https://comark.dev/), not Astro's own `render()` — see `src/ui/components/markdown.astro`.
+- **Language:** TypeScript
+- **i18n:** Built-in support for English (default) and Portuguese.
+- **Deployment:** Optimized for Vercel (static output).
+
+## 📁 Project Structure
+
+- `src/content/`: Main content collections (Blog, Projects, Work, Books, Social Links).
+- `src/pages/`: File-based routing, including i18n-specific routes.
+- `src/components/`: Reusable Astro components.
+- `src/layouts/`: Base templates (`main-layout.astro`, `linkbio-layout.astro`).
+- `src/i18n/`: Localization data and types.
+- `src/consts.ts`: Global site metadata and configuration.
+- `panda.config.ts`: Styling configuration and semantic tokens.
+
+## 🚀 Building and Running
+
+The project uses `npm` (or `pnpm`/`yarn`) for package management.
+
+- **Install dependencies:** `npm install`
+- **Development server:** `npm run dev` (starts at `localhost:4321`)
+- **Build for production:** `npm run build` (runs `astro check` and `astro build`)
+- **Preview production build:** `npm run preview`
+- **Linting:** `npm run lint` or `npm run lint:fix`
+- **Panda CSS Codegen:** `npm run prepare` (automatically runs `panda codegen`)
+
+## 🎨 Development Conventions
+
+### Styling (Panda CSS)
+- The `styled-system/` directory contains the generated CSS utility functions.
+- Run `npm run prepare` (`panda codegen`) after changing `panda.config.ts`. A running dev server does **not** pick up config changes — restart it.
+- In `panda.config.ts`, tokens go under `theme.extend.*`, never `theme.*` directly. A top-level `theme.tokens` **replaces** Panda's preset instead of merging, silently removing `fontSizes`, `sizes`, `radii` and the default shadow scale.
+
+### Fonts
+- Every family (Geist, Geist Mono, Fraunces, Instrument Serif) is registered in `astro.config.ts` with Astro's Fonts API and emitted by `<Font>` in both layouts. Files are downloaded from Google at build time and self-hosted — there is no runtime request to Google.
+- Reference a family only through its variable: `var(--font-geist)`, `var(--font-geist-mono)`, `var(--font-fraunces)`, `var(--font-instrument-serif)`. The real family names are hashed, so a literal `"Fraunces"` or `GeistMono` matches nothing and falls back silently.
+- Google only includes a variable axis in the file when it is requested. Fraunces requests `SOFT` and `WONK` through `options.experimental.variableAxis`; drop them from the config and the `font-variation-settings` in `global.css` stop doing anything.
+- Preload a face only if it paints above the fold on every page that uses the layout. The main layout preloads Geist alone; `/linkbio` also preloads Fraunces, which its header always shows.
+
+### Color (Design System)
+
+Full documentation: **[`docs/design-system.md`](docs/design-system.md)**, published at **[/design.md](https://www.phenrique.me/design.md)**.
+
+Two layers, and only the second is public API:
+
+- **Layer 1 — raw palette** (`theme.extend.tokens.colors`): `paper`, `graphite`, `cobalt`, the editorial tints (`sage`, `moss`, `sky`, `periwinkle`, `clay`, `ochre`), `signal` and `code` (syntax hues). Never referenced from a component.
+- **Layer 2 — semantic roles** (`theme.extend.semanticTokens.colors`): `bg.*`, `text.*`, `border.*`, `accent.*`, `status.*`, `syntax.*`, `sheet.*`, `tint.*`, `linkbio.*`. Each carries a `{ base, _dark }` pair. **This is what components write.**
+
+```ts
+// ✅ semantic role — carries both themes
+css({ bg: "bg.raised", color: "text.secondary", borderColor: "border.subtle" })
+
+// ❌ raw palette (single value) or hex (invisible to the system)
+css({ bg: "paper.200", color: "#55504A" })
+```
+
+Rules worth knowing before writing styles:
+
+- **No hex, no `rgba()` in components.** Every colour is a semantic token. Translucent tokens (`bg.hover`, `bg.scrim`, `border.subtle`, `border.underline`, `border.hairline`) already cover the cases a solid ramp step cannot.
+- **`accent.default` is never text.** It is for fills, rings and indicators. Accent text uses `text.accent`, which resolves to `cobalt.600` in light mode — `cobalt.500` is only 3.5:1 on the light canvas and fails AA.
+- **Focus rings use `border.focus`, not `border.accent`.** Same reason: a focus indicator needs 3:1, and `border.focus` is `cobalt.600` in light mode. Standard ring is `_focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" }`; inset it (`-2px`) inside a bordered group such as the theme switch.
+- **Text levels:** `text.primary` headings · `text.secondary` body and prose · `text.muted` single-line metadata · `text.faint` incidental only (3.5:1, fails AA by design).
+- **`tint.*` classifies content, not chrome.** Use `surface`/`text`/`border` as a matched set; never mix hues across a set. Chips go through `Badge` (`src/ui/components/badge.astro`, `tone` prop), not hand-rolled `css()`. Assign a hue per category with `tintForKey` from `src/utils/tint.ts`, pinning small known vocabularies explicitly (see `GENRE_HUES` in `book-genre-badge.astro`) — never by list index.
+- **Panda extracts styles statically.** A computed token path such as `` css({ bg: `tint.${hue}.surface` }) `` generates no CSS at all. Use a `Record<Hue, string>` of literal `css()` calls and index into it. The same applies to token names inside JS strings: write CSS custom properties in kebab-case (`--colors-bg-raised-hover`), not the dotted token path.
+- **`linkbio.*` is scoped.** Only `src/views/linkbio/**` and `src/layouts/linkbio-layout.astro` may use it, and those files use nothing else — `/linkbio` is always dark and does not follow the site theme.
+- **Elevation** lives in `shadows.elevation.*`; from plain CSS use `var(--shadows-elevation-pill)`, which carries both themes.
+- **Code highlighting** uses Shiki's css-variables theme (`src/utils/code-theme.ts`): markup carries `var(--shiki-token-*)`, and `global.css` binds those to `syntax.*`. Never hard-code a Shiki theme's hex. `npm run check:syntax` (part of `build`) fails when a role drops under 5:1 on `bg.code` (the code panel's own surface token — not `bg.raised`, which cards and sheets keep) or sits within ΔE 8 (OKLab) of another role, in either theme — contrast alone let a palette of near-identical browns through. Comark preloads only vue, tsx, svelte, ts, js, bash, json, yaml and astro; any other fence language (e.g. `kotlin`) must be added to `languages` in `code-theme.ts`, or it silently renders unhighlighted.
+- Long-form content: the `.prose` layer in `src/ui/styles/global.css` styles rendered Markdown, entirely in semantic tokens. Change it there, not per-article. It sits in its own cascade layer declared **before** Panda's (`@layer reset, base, tokens, prose, recipes, utilities`) so a component can still override a prose default with `css()`.
+- **The reading column.** `.prose` is typography; `.prose-longform` adds the grid. Text sits on `--prose-measure` (40rem, ~79 characters); a block spans the full article width by carrying `data-prose-track="wide"` — placement lives in `global.css`, not in the components. Only tables and `::figure` break out; code blocks stay on the measure. Prose headings are Fraunces, body is Geist. Vertical rhythm is **top margins only, never bottom**: margins do not collapse between grid items. Panels (code, tables, figures) carry `data-prose-panel` for spacing — never reuse `data-prose-track` for rhythm, since a block that stops breaking out must not lose its gaps.
+- **Components in Markdown.** `::callout`, `::aside`, `::quote`, `::figure` and `::tweet` are registered in `src/ui/components/prose/index.tsx` and listed in `tags.ts`. The parser validates documents against that list, so an unregistered `::name` fails the build instead of rendering as an unstyled inline element. Add a component to both files or not at all.
+- **Checking the prose layer.** There are no fixture posts; judge a change against the real pages that use it. `/about` has links, footnotes, `::callout` and `::quote`. `/writing/interfaces-are-arguments` has `::tweet` embeds, tables and a code block. `/writing/the-shape-of-a-good-change` has task lists. Nothing live uses `::aside` or `::figure`, so a change touching those needs a throwaway post to check against — and since drafts are published too, never commit it.
+
+### Content
+- Content is managed via the Astro Content Layer in `src/content.config.ts`.
+- Supported loaders: `glob` for Markdown and YAML. MDX is not installed; components in content use Comark's `::component` syntax.
+- **Collections:**
+    - `writing`: Articles with `title`, `description`, `date`, `draft`. Drafts are public: they are listed, routed and built like any post, and carry an amber Draft badge (`status.pending`) so readers know they are not final.
+    - `projects`: Portfolio items with `demoURL`, `repoURL`.
+    - `work`: Work page data (highlights, stack, education, languages).
+    - `workExperience`: Professional experience roles.
+    - `books`: Reading list tracking with status, genres, and ratings.
+
+### Agent-readable pages (`.md` endpoints)
+
+The document pages — `/about`, `/work`, `/reading`, `/colophon` and every article, in both locales — each have a plain-Markdown twin at their own address plus `.md`: `/work` and `/work.md`. `/llms.txt` indexes them. The listing pages (`/` and `/writing`) have none; the index already enumerates what they would link to.
+
+- **`markdownPath` in `src/utils/markdown/routes.ts` is the registry.** It is the single answer to "does this page have a twin", read by both `head.astro` (which emits `<link rel="alternate" type="text/markdown">`) and the build. A new `.md` endpoint that is not listed there ships a Markdown version nothing links to and no crawler finds. Articles are matched by their `/writing/` prefix; every other path is listed explicitly, for the same reason as `TRANSLATED_PATHS`.
+- **Add the page to `/llms.txt` too** (`src/pages/llms.txt.ts`). It is generated from the collections, so articles appear on their own, but a new static page needs a line in `pagesFor`.
+- **Prose pages serialise themselves; data pages need a composer.** Where the body is Markdown (`about`, `colophon`, `writing`), the endpoint is frontmatter plus `entry.body`. Where the page is structured fields rendered as cards and grids (`work`, `reading`), a composer in `src/utils/markdown/` builds the document from the same entry and the same i18n dictionary the view reads — mirroring the page's section order and using its dictionary labels, so the two cannot drift. Never convert the rendered HTML; the structure is the part worth keeping.
+- **`flattenDirectives` rewrites Comark's `::component` syntax** into standard Markdown — callouts, quotes and tweets become blockquotes carrying the words the page displays, resolving a callout's label exactly as `createCallout` does. It works on the source, line by line, and skips code fences. A new `::component` with no case in `render` falls through to its own body: register one there when the box carries meaning of its own.
+- **Drafts follow the page.** Build paths from `routablePosts` and list from `listedPosts`, so a draft never has a `.md` twin its page does not also have.
+- **Dates and locales.** Use the view's own `Intl` formatter settings, including `timeZone: "UTC"` — these are plain YAML days parsed as UTC midnight, and formatting in the build machine's zone renders the previous day west of Greenwich.
+
+### Internationalization (i18n)
+- Configured in `astro.config.ts` with `en` (default) and `pt`.
+- Translation files are located in `src/i18n/`.
+
+### Code Quality
+- Strictly follow TypeScript types.
+- Linting is enforced via ESLint with `eslint-plugin-astro`.
+- Formatting is handled by Prettier.

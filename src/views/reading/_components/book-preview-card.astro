@@ -1,0 +1,212 @@
+---
+import { Image } from "astro:assets";
+
+import { css } from "../../../../styled-system/css";
+import { flex, hstack, vstack } from "../../../../styled-system/patterns";
+import BookGenreBadge from "./book-genre-badge.astro";
+
+interface Props {
+  title: string;
+  genres: string[];
+  authors: string[];
+  coverUrl: string | null;
+  progress: number | null;
+  summary?: string | null;
+  lastUpdate?: string | null;
+  lastUpdateLabel?: string;
+}
+
+const { title, genres, authors, coverUrl, progress, summary, lastUpdate, lastUpdateLabel } = Astro.props;
+const bookProgress = progress ?? 0;
+---
+
+<div
+  class={`book-card ${flex({
+    borderRadius: "xl",
+    width: "full",
+    bgColor: "bg.raised",
+    border: "1px solid",
+    borderColor: "border.subtle",
+    transition: "background-color 0.2s ease",
+    _hover: { bgColor: "bg.raisedHover" },
+  })}`}
+>
+  <Image
+    width={600}
+    height={900}
+    alt={title}
+    loading="eager"
+    src={coverUrl !== null
+      ? `${import.meta.env.PUBLIC_VERCEL_BLOB_STORAGE_URL}${coverUrl}`
+      : "/images/book-cover-placeholder.png"}
+    class={css({
+      borderTopLeftRadius: "xl",
+      borderBottomLeftRadius: "xl",
+      width: { base: "7.5rem", md: "13rem" },
+      minHeight: { base: "11.25rem", md: "19.5rem" },
+      flexShrink: 0,
+      alignSelf: "stretch",
+      boxShadow: "sm",
+      objectFit: "cover",
+    })}
+  />
+  <div
+    class={flex({
+      flexDirection: "column",
+      justifyContent: "center",
+      gap: { base: 5, md: 8 },
+      px: { base: 4, md: 6 },
+      py: { base: 4, md: 6 },
+      flex: 1,
+      overflow: "hidden",
+    })}
+  >
+    <div class={vstack({ gap: 5, alignItems: "stretch" })}>
+      <div class={vstack({ gap: 2, alignItems: "stretch" })}>
+        <h3
+          title={title}
+          class={"fraunces-font " +
+            flex({
+              fontSize: { base: "md", md: "xl" },
+              lineHeight: 1.25,
+              fontWeight: "medium",
+              color: "text.primary",
+              lineClamp: 2,
+              overflow: "hidden",
+              boxOrient: "vertical",
+              textOverflow: "ellipsis",
+            })}
+        >
+          {title}
+        </h3>
+        <h4
+          class={css({
+            fontSize: "sm",
+            lineHeight: "tight",
+            fontWeight: "medium",
+            color: "text.muted",
+          })}
+        >
+          {authors.length === 0 ? "Unknown" : authors.join(", ")}
+        </h4>
+      </div>
+      {
+        summary ? (
+          // Hidden on the wrapper rather than the paragraph: Panda's lineClamp utility
+          // sets its own `display: -webkit-box`, and it wins the cascade over `display`.
+          // Below md the cover sits beside a ~190px column, where an excerpt reads as
+          // noise and stretches the cover well past its 2:3 crop.
+          <div class={css({ display: { base: "none", md: "block" } })}>
+            <p
+              class={css({
+                fontSize: "sm",
+                lineHeight: 1.6,
+                color: "text.secondary",
+                lineClamp: 3,
+                boxOrient: "vertical",
+                overflow: "hidden",
+              })}
+            >
+              {summary}
+            </p>
+          </div>
+        ) : null
+      }
+      <div
+        class={`genre-container ${hstack({
+          gap: 2,
+          p: 0.5,
+          overflowX: "auto",
+        })}`}
+        style="scrollbar-width: none; -ms-overflow-style: none;"
+      >
+        {genres.map((genre) => <BookGenreBadge genre={genre} />)}
+      </div>
+    </div>
+    <div class={vstack({ gap: 2, alignItems: "stretch", width: "full" })}>
+      {
+        lastUpdate ? (
+          <span
+            class={css({
+              fontSize: "xs",
+              fontWeight: "medium",
+              lineHeight: "tight",
+              color: "text.faint",
+            })}
+          >
+            {lastUpdateLabel} · {lastUpdate}
+          </span>
+        ) : null
+      }
+      <div class={flex({ gap: 2, alignItems: "center" })}>
+        <div
+          class={css({
+            h: 1,
+            w: "full",
+            borderRadius: "sm",
+            position: "relative",
+            bg: "bg.track",
+          })}
+        >
+          <div
+            style={{ width: `${bookProgress}%` }}
+            class={css({
+              h: 1,
+              top: 0,
+              left: 0,
+              display: "block",
+              borderRadius: "sm",
+              position: "absolute",
+              bgColor: "accent.default",
+            })}
+          >
+          </div>
+        </div>
+        <span class={css({ fontSize: "sm", color: "text.muted" })}>{bookProgress}%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .genre-container::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+  function updateOverflow() {
+    const containers = document.querySelectorAll(".genre-container");
+
+    containers.forEach((el) => {
+      const container = el as HTMLElement;
+      const update = () => {
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        const atStart = container.scrollLeft <= 1;
+        const atEnd = container.scrollLeft >= maxScroll - 1;
+
+        let gradient;
+        if (maxScroll <= 1) {
+          gradient = "none";
+        } else if (atStart) {
+          gradient = "linear-gradient(to right, black 75%, transparent 100%)";
+        } else if (atEnd) {
+          gradient = "linear-gradient(to left, black 75%, transparent 100%)";
+        } else {
+          gradient = "linear-gradient(to right, transparent 0, black 2rem, black calc(100% - 2rem), transparent 100%)";
+        }
+
+        container.style.maskImage = gradient;
+      };
+
+      update();
+      container.addEventListener("scroll", update, { passive: true });
+
+      const ro = new ResizeObserver(update);
+      ro.observe(container);
+    });
+  }
+
+  updateOverflow();
+  document.addEventListener("astro:after-swap", updateOverflow);
+</script>

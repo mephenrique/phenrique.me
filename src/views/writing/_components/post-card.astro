@@ -1,0 +1,107 @@
+---
+import { css } from "../../../../styled-system/css";
+import DraftBadge from "./draft-badge.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  draftLabel?: string;
+  /** "Note", in the unfiltered index. Articles are the default and carry none. */
+  kindLabel?: string;
+  date: string;
+  dateTime: string;
+  description: string;
+}
+
+const { href, title, date, dateTime, description, draftLabel, kindLabel } = Astro.props;
+---
+
+<a
+  href={href}
+  class={css({
+    display: "flex",
+    flexDirection: "column",
+    minWidth: 0,
+    py: 3,
+    // Hanging hover: the padding is pulled back out with a negative margin, so
+    // the text lines up with the page title and the hover surface bleeds into
+    // the gutter instead of indenting the list.
+    px: { base: 3, md: 4 },
+    mx: { base: -3, md: -4 },
+    borderRadius: "xl",
+    transitionProperty: "background-color",
+    transitionDuration: "250ms",
+    transitionTimingFunction: "ease-in-out",
+    _motionReduce: { transitionDuration: "0ms" },
+    _hover: { backgroundColor: "bg.hover" },
+    _focusVisible: {
+      backgroundColor: "bg.hover",
+      outline: "2px solid token(colors.border.focus)",
+      outlineOffset: "2px",
+    },
+  })}
+>
+  <span class={css({ fontSize: "md", fontWeight: "medium", color: "text.primary", lineHeight: "1.5" })}>
+    {title}
+  </span>
+  {
+    /*
+      Always rendered, at every card. The description is what tells a reader
+      whether to open the post, so it is not hover-only: a pointer is the one
+      input that can reveal it, and it leaves touch and scanning with a bare
+      title. Clamping it also fixes the card's height, which is what keeps
+      hovering down the list from pushing the next card out from under the
+      cursor.
+    */
+  }
+  <span
+    class={css({
+      display: { base: "block", sm: "flex" },
+      minWidth: 0,
+      fontSize: "sm",
+      lineHeight: "1.5",
+      color: "text.muted",
+    })}
+  >
+    {
+      /*
+        The status follows the date, never leads it: in front, it pushed every
+        draft's date out of line with the others; after the title, it wrapped
+        onto a line of its own whenever the title filled the row. Here it reads
+        like the article header's own "date • Draft • 5 min read".
+      */
+    }
+    <span class={css({ display: "flex", alignItems: "center", gap: 1.5, flexShrink: 0 })}>
+      <time datetime={dateTime}>{date}</time>
+      {
+        kindLabel && (
+          <span>
+            <span aria-hidden="true">·&nbsp;</span>
+            {kindLabel}
+          </span>
+        )
+      }
+      {draftLabel && <DraftBadge label={draftLabel} />}
+    </span>
+    <span aria-hidden="true" class={css({ display: { base: "none", sm: "inline" }, flexShrink: 0 })}>
+      &nbsp;·&nbsp;
+    </span>
+    <span
+      class={css({
+        // Two lines on its own row below `sm`, one line after the date above.
+        // A single line at 375px carries about four words, which is not
+        // enough to decide on a post. Either way the height is fixed at
+        // render, so nothing moves under the cursor.
+        display: { base: "-webkit-box", sm: "block" },
+        boxOrient: "vertical",
+        lineClamp: "2",
+        minWidth: 0,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: { base: "normal", sm: "nowrap" },
+      })}
+    >
+      {description}
+    </span>
+  </span>
+</a>

@@ -1,0 +1,33 @@
+---
+import Badge from "../../../ui/components/badge.astro";
+import { tintForKey, tintKey, type TintHue } from "../../../utils/tint.ts";
+
+interface Props {
+  genre: string;
+}
+
+const { genre } = Astro.props;
+
+/**
+ * The reading list's genre vocabulary, pinned so the six current genres get six
+ * distinct hues — hashing alone collapses them onto two. Genres are authored in
+ * English in src/content/books/*.yaml and are not localised, so a genre keeps
+ * its hue across every locale.
+ *
+ * Anything not listed falls back to `tintForKey`, which is stable but may
+ * collide; add it here when it does.
+ */
+const GENRE_HUES: Record<string, TintHue> = {
+  christian: "sage",
+  theology: "periwinkle",
+  apologetics: "sky",
+  philosophy: "clay",
+  "personal development": "ochre",
+  education: "moss",
+};
+
+const key = tintKey(genre);
+const hue = GENRE_HUES[key] ?? tintForKey(key);
+---
+
+<Badge tone={hue}>{genre}</Badge>

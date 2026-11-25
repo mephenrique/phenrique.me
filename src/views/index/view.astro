@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+import { css } from "../../../styled-system/css";
+import { hstack } from "../../../styled-system/patterns";
+import MainLayout from "../../layouts/main-layout.astro";
+import Container from "../../ui/components/container.astro";
+import Markdown from "../../ui/components/markdown.astro";
+
+interface Props {
+  /** The page heading: the name on its own. */
+  title: string;
+  /**
+   * Head metadata. Separate from `title` because the heading is just the name
+   * while the `<title>` has to say what the name does. Both were hardcoded in
+   * the layout call below, so the Portuguese home page shipped an English
+   * title and description.
+   */
+  metadata: { title: string; description: string };
+  /** Raw markdown body for the page's intro copy. */
+  body: string | undefined;
+}
+
+const allSocialLinks = await getCollection("socialLinks");
+const socialLinks = allSocialLinks.filter((link) => link.data.icon !== undefined);
+const isPortuguese = Astro.currentLocale === "pt";
+---
+
+<MainLayout
+  title={Astro.props.metadata.title}
+  description={Astro.props.metadata.description}
+  lang={Astro.currentLocale ?? "en"}
+>
+  <Container styles={css.raw({ py: { base: 32, sm: 44 } })}>
+    <div
+      class={css({
+        zIndex: 0,
+        pointerEvents: "none",
+        background: "radial-gradient(token(colors.bg.bloom) 0%, transparent 70%)",
+        width: { base: "full", md: "600px" },
+        height: "400px",
+        position: "absolute",
+        top: 0,
+        left: "50%",
+        transform: "translate(-50%)",
+      })}
+    >
+    </div>
+    <h1
+      class={"instrument-serif " +
+        css({
+          mt: 4,
+          color: "text.primary",
+          fontSize: { base: "4xl", md: "5xl" },
+          fontWeight: "normal",
+          fontStyle: "italic",
+          letterSpacing: "-0.06em",
+          lineHeight: "0.9",
+        })}
+    >
+      {Astro.props.title}
+    </h1>
+    <Markdown body={Astro.props.body} class={"prose " + css({ mt: 10, maxW: "var(--prose-measure)" })} />
+    <div class={hstack({ gap: { base: 6, lg: 4 }, mt: 12 })}>
+      {
+        socialLinks.map((item) => (
+          <a
+            target="_blank"
+            href={item.data.link}
+            aria-label={
+              isPortuguese
+                ? `Visitar Paulo Henrique no ${item.data.name} (abre em uma nova aba)`
+                : `Visit Paulo Henrique on ${item.data.name} (opens in a new tab)`
+            }
+            rel="noopener noreferrer"
+            set:html={item.data.icon}
+            class={css({
+              w: 4,
+              color: "text.muted",
+              display: "block",
+              borderRadius: "sm",
+              _focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" },
+              "& svg": { w: "full", h: "auto" },
+              "& svg path": {
+                transition: "fill 0.15s ease-in-out",
+              },
+              "& svg:hover path": {
+                fill: "text.primary",
+              },
+            })}
+          />
+        ))
+      }
+    </div>
+  </Container>
+</MainLayout>

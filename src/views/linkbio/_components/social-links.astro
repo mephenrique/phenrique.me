@@ -1,0 +1,92 @@
+---
+import { Image } from "astro:assets";
+
+import { css } from "../../../../styled-system/css";
+import { vstack } from "../../../../styled-system/patterns";
+
+interface SocialLink {
+  name: string;
+  handle: string;
+  link: string;
+  logoUrl: string;
+}
+
+interface Props {
+  links: SocialLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<div
+  class={vstack({
+    alignItems: "stretch",
+    marginTop: { base: 12, md: 16 },
+  })}
+>
+  {
+    links.map((item) => (
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={item.link}
+        class={css({
+          py: 2,
+          px: 4,
+          display: "flex",
+          borderRadius: "xl",
+          border: "1px solid",
+          alignItems: "center",
+          borderColor: "linkbio.border",
+          backgroundColor: "linkbio.surface",
+          transition: "transform 0.15s ease-in-out",
+          _hover: {
+            transform: "scale(1.02)",
+          },
+          _focusVisible: { outline: "2px solid token(colors.linkbio.focus)", outlineOffset: "2px" },
+        })}
+      >
+        <span
+          class={css({
+            width: 8,
+            display: "block",
+            ...(item.name === "Website" && {
+              "& img": {
+                borderRadius: "full",
+              }
+            })
+          })}
+        >
+          <Image src={item.logoUrl} width="32" height="32" alt={`${item.name} logo`} loading="eager" />
+        </span>
+        <div
+          class={css({
+            ml: 4,
+            display: "flex",
+            flexDirection: "column",
+          })}
+        >
+          <span
+            class={css({
+              color: "linkbio.textPrimary",
+              textAlign: "left",
+              fontWeight: "medium",
+            })}
+          >
+            {item.name}
+          </span>
+          <span
+            class={css({
+              fontSize: "sm",
+              textAlign: "left",
+              color: "linkbio.textSecondary",
+              fontWeight: "medium",
+            })}
+          >
+            {item.handle}
+          </span>
+        </div>
+      </a>
+    ))
+  }
+</div>

@@ -1,0 +1,119 @@
+---
+import { Font } from "astro:assets";
+
+import "../ui/styles/global.css";
+import Head from "../ui/components/head.astro";
+import Header from "../ui/components/header.astro";
+import Footer from "../ui/components/footer.astro";
+import { css, cx } from "../../styled-system/css";
+import { flex } from "../../styled-system/patterns";
+import enDict from "../i18n/main/en";
+import ptDict from "../i18n/main/pt";
+import { DEFAULT_LOCALE, LOCALES, pathAlternates, type Alternates, type Locale } from "../utils/i18n-routes.ts";
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: string;
+  image?: string;
+  /**
+   * Overrides the address-derived alternates, for pages whose slug is itself
+   * translated. Only the articles need it; every other page is the same path
+   * under a locale prefix.
+   */
+  alternates?: Alternates;
+  ogType?: "website" | "article";
+  publishedTime?: Date;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, lang = "en", image, alternates, ogType, publishedTime, jsonLd } = Astro.props;
+
+const locale = (LOCALES as readonly string[]).includes(lang) ? (lang as Locale) : DEFAULT_LOCALE;
+
+// One value feeds both the `hreflang` links and the header's language menu, so
+// the pair a crawler is told about is the pair a reader can actually walk.
+const pageAlternates = alternates ?? pathAlternates(Astro.url.pathname);
+
+const dictionaries = { en: enDict, pt: ptDict } as const;
+const dict = dictionaries[lang as keyof typeof dictionaries] ?? enDict;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <Head
+      title={title}
+      description={description}
+      image={image}
+      locale={locale}
+      alternates={pageAlternates}
+      ogType={ogType}
+      publishedTime={publishedTime}
+      jsonLd={jsonLd}
+    />
+    <!-- Only Geist is preloaded: it is the one face every page paints first. The
+         home title is Instrument Serif and other titles are Fraunces, so
+         preloading either would download ~120 KB a page may never use. -->
+    <Font cssVariable="--font-geist" preload={[{ subset: "latin", style: "normal" }]} />
+    <Font cssVariable="--font-fraunces" />
+    <Font cssVariable="--font-geist-mono" />
+    <Font cssVariable="--font-instrument-serif" />
+    <script is:inline>
+      (function themeEffect() {
+        const pref = localStorage.getItem("theme");
+        if (pref === "dark" || (pref === null && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.add("light");
+        }
+      })();
+    </script>
+  </head>
+  <body class={cx("paper-grain", css({ bgColor: "bg.canvas", color: "text.secondary" }))}>
+    <!-- First stop for keyboard users: skips the header's nine tab stops. Parked
+         above the viewport rather than hidden, so it stays in the accessibility
+         tree, and slides in over the header only while it has focus. -->
+    <a
+      href="#main"
+      class={css({
+        position: "fixed",
+        top: 4,
+        left: 4,
+        // Above the header wrapper (zIndex 2).
+        zIndex: 3,
+        px: 4,
+        py: 2.5,
+        borderRadius: "full",
+        bg: "bg.inverted",
+        color: "text.onInverted",
+        fontSize: "sm",
+        fontWeight: "medium",
+        textDecoration: "none",
+        boxShadow: "elevation.pill",
+        transform: "translateY(calc(-100% - token(spacing.8)))",
+        transition: "transform 0.2s ease",
+        _motionReduce: { transition: "none" },
+        _focus: { transform: "translateY(0)" },
+        _focusVisible: { outline: "2px solid token(colors.border.focus)", outlineOffset: "2px" },
+      })}
+    >
+      {dict.header["skip-label"]}
+    </a>
+    <div
+      class={flex({
+        minH: "100dvh",
+        flexDirection: "column",
+      })}
+    >
+      <Header lang={lang} dict={dict} alternates={pageAlternates} />
+      <!-- `tabindex="-1"` lets the skip link move focus here, so the next Tab
+           continues inside the content rather than back at the header. The
+           landing focus is programmatic, so it draws no ring. -->
+      <main id="main" tabindex="-1" class={css({ flex: 1, _focus: { outline: "none" } })}>
+        <slot />
+      </main>
+      <Footer lang={lang} dict={dict} />
+    </div>
+  </body>
+</html>

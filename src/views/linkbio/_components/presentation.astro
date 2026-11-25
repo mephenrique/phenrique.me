@@ -1,0 +1,56 @@
+---
+import { Image } from "astro:assets";
+
+import { css } from "../../../../styled-system/css";
+import { vstack } from "../../../../styled-system/patterns";
+
+interface Props {
+  bioDescription: string;
+}
+
+const { bioDescription } = Astro.props;
+---
+
+<div class={css({ mt: 2, textAlign: "center" })}>
+  <div class={css({ maxW: 24, mx: "auto" })}>
+    <Image
+      src={import.meta.env.PUBLIC_VERCEL_BLOB_STORAGE_URL + "/linkbio-page.me.webp"}
+      alt="Me smiling in a black and white portrait"
+      width="1048"
+      height="1048"
+      loading="eager"
+      decoding="async"
+      class={css({
+        mb: 6,
+        mx: "auto",
+        boxShadow: "lg",
+        borderRadius: "full",
+        outline: "1px solid token(colors.linkbio.ring)",
+      })}
+    />
+  </div>
+  <h1
+    class={"fraunces-font " + css({
+      fontSize: "2xl",
+      color: "transparent",
+      fontWeight: 400,
+      backgroundClip: "text",
+      backgroundImage:
+        "linear-gradient(to bottom, token(colors.linkbio.headingFrom), token(colors.linkbio.headingFrom) 40%, token(colors.linkbio.headingTo))",
+    })}
+  >
+    Paulo Henrique
+  </h1>
+  <div lang={Astro.currentLocale} class={vstack({ mt: 1, gap: 0.5 })}>
+    <h2
+      class={css({
+        fontSize: "sm",
+        color: "linkbio.textSecondary",
+        fontWeight: "semibold",
+        maxWidth: { base: "sm", sm: "md" },
+      })}
+    >
+      {bioDescription}
+    </h2>
+  </div>
+</div>

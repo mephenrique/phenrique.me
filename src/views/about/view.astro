@@ -1,0 +1,130 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+
+import { css } from "../../../styled-system/css";
+import MainLayout from "../../layouts/main-layout.astro";
+import Container from "../../ui/components/container.astro";
+import Markdown from "../../ui/components/markdown.astro";
+import BackToTop from "../../ui/components/back-to-top.astro";
+import { SITE } from "../../consts.ts";
+
+interface Props {
+  title: string;
+  bioImageResource: string;
+  /** Head metadata. Was hardcoded in English, so `/pt/about` shipped it too. */
+  metadata: { description: string };
+  /** Raw markdown body for the page's prose. */
+  body: string | undefined;
+}
+
+// `sameAs` is read from the social-links collection rather than restated here,
+// so the profiles a crawler is given stay the profiles the page actually links.
+const socialLinks = await getCollection("socialLinks");
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE.NAME,
+  email: `mailto:${SITE.EMAIL}`,
+  url: new URL("/", Astro.site).href,
+  sameAs: socialLinks
+    .map((link) => link.data.link)
+    .filter((href) => !href.startsWith(Astro.site?.origin ?? "")),
+};
+---
+
+<MainLayout
+  title={Astro.props.title}
+  description={Astro.props.metadata.description}
+  lang={Astro.currentLocale ?? "en"}
+  jsonLd={jsonLd}
+>
+  {/*
+    Wider than the site default so the article's `wide` track has somewhere to
+    go; the prose column inside stays at `--prose-measure`, centred, and the
+    title is pinned to the same measure so the two share an axis. Previously the
+    body sat at `maxW: xl` with no `mx: auto`, which left it flush against the
+    left edge under a centred title.
+  */}
+  <Container styles={css.raw({ py: { base: 32, sm: 40 }, maxWidth: { base: "full", sm: "3xl", lg: "5xl" } })}>
+    {/*
+      Centred over the text column but not pinned to it: on the reading measure
+      the title forces a three-line stack that breaks mid-phrase. Display type
+      can run wider than the prose it introduces, so this stays a fixed step
+      above `--prose-measure` rather than tracking it.
+    */}
+    <h1
+      class={"fraunces-font " + css({
+        maxWidth: "47rem",
+        marginInline: "auto",
+        fontSize: { base: "4xl", md: "5xl" },
+        color: "text.primary",
+        textAlign: "center",
+        textWrap: "balance",
+        lineHeight: "1.1",
+      })}
+    >
+      {Astro.props.title}
+    </h1>
+    {/*
+      Full container width, which is the same track a `::figure{layout="wide"}`
+      lands on inside the article below — so the page opens on the widest thing
+      it contains and steps inward to the prose, rather than the other way
+      round. The source is 4208×1894 (2.22:1), given here so the box is reserved
+      before the file arrives; Comark and `astro:assets` both leave a remote URL
+      unprocessed, so the intrinsic size has to be stated rather than inferred.
+    */}
+    <div
+      class={css({
+        position: "relative",
+        // Keeps the overlays' z-indexes local: the gradient's zIndex 2 would
+        // otherwise tie with the fixed header and, later in the DOM, paint over it.
+        isolation: "isolate",
+        mt: 10,
+        overflow: "hidden",
+        borderRadius: "xl",
+        border: "1px solid",
+        borderColor: "border.hairline",
+        _before: {
+          content: "\"\"",
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          pointerEvents: "none",
+          backgroundImage: "url(\"/images/paper-grain.webp\")",
+          backgroundRepeat: "repeat",
+          opacity: 0.055,
+          mixBlendMode: "soft-light",
+        },
+        _after: {
+          content: "\"\"",
+          position: "absolute",
+          inset: 0,
+          zIndex: 2,
+          pointerEvents: "none",
+          background: "linear-gradient(to bottom, transparent 58%, var(--colors-bg-canvas))",
+          opacity: 0.42,
+        },
+      })}
+    >
+      <Image
+        src={import.meta.env.PUBLIC_VERCEL_BLOB_STORAGE_URL + Astro.props.bioImageResource}
+        alt="Paulo Henrique at a lookout, a forested valley and a glass railing behind him"
+        width="4208"
+        height="1894"
+        loading="eager"
+        decoding="async"
+        class={css({
+          display: "block",
+          width: "full",
+          height: { base: "18rem", sm: "auto" },
+          objectFit: "cover",
+          objectPosition: "42% center",
+        })}
+      />
+    </div>
+    <Markdown body={Astro.props.body} class={"prose prose-longform " + css({ mt: 16 })} toc />
+    <BackToTop />
+  </Container>
+</MainLayout>

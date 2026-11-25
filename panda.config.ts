@@ -1,69 +1,467 @@
 import { defineConfig } from "@pandacss/dev";
 
+/**
+ * Two-layer colour system.
+ *
+ *   Layer 1 — `theme.tokens.colors`: the raw palette. Fixed hues on fixed
+ *             ramps. Never referenced from a component.
+ *   Layer 2 — `theme.semanticTokens.colors`: role names bound to a
+ *             light/dark pair. The only thing components are allowed to use.
+ *
+ * Full rationale, contrast ratios and usage rules: docs/design-system.md,
+ * served publicly at /design.md.
+ */
 export default defineConfig({
-  // Whether to use CSS reset
+  // Whether to use css reset
   preflight: true,
 
-  // Where to look for your CSS declarations
-  include: ["./src/**/*.{js,jsx,ts,tsx}", "./.storybook/**/*.{js,jsx,ts,tsx}"],
+  // Where to look for your css declarations
+  include: ["./src/**/*.{js,jsx,ts,tsx,astro}"],
 
   // Files to exclude
   exclude: [],
 
   // Useful for theme customization
   theme: {
-    extend: {},
-    semanticTokens: {
-      colors: {
-        clr_white_neutral_900: {
-          // app-bg
-          value: { base: "#FFFFF8", _dark: "{colors.neutral.900}" },
+    // Everything lives under `extend` so it MERGES with Panda's preset theme.
+    // A bare `theme.tokens` would replace the preset outright and take
+    // fontSizes, sizes, radii and the default shadow scale with it.
+    extend: {
+      // -------------------------------------------------------------------
+      // Layer 1 — raw palette
+      // -------------------------------------------------------------------
+      tokens: {
+        colors: {
+          /**
+           * Neutrals, light half. Light-mode surfaces read down from
+           * `paper.50`; dark-mode text reads up from `paper.500`.
+           * `paper` and `graphite` are one continuous ramp split at the
+           * midpoint, because each theme draws from one half only.
+           *
+           * Slightly warm paper surfaces meet a cooler graphite dark theme.
+           */
+          paper: {
+            0: { value: "#FFFFFF" }, // code panel (light) — top of the surface ramp
+            50: { value: "#FAFAF9" }, // app canvas (light)
+            100: { value: "#F7F7F5" }, // sunken (light)
+            200: { value: "#F4F4F2" }, // raised surface (light)
+            300: { value: "#ECECEA" }, // hover (light), primary text (dark)
+            400: { value: "#E0E0DC" }, // default border (light)
+            500: { value: "#C1C4C9" }, // strong border (light), secondary text (dark)
+          },
+
+          /**
+           * Neutrals, dark half. Dark-mode surfaces read up from
+           * `graphite.950`; light-mode text reads down from `graphite.400`.
+           */
+          graphite: {
+            300: { value: "#A6AAB1" }, // muted text (dark)
+            400: { value: "#878782" }, // decorative / disabled only — 3.5:1 on paper.50
+            500: { value: "#6B6B66" }, // muted text (light)
+            600: { value: "#52524E" }, // secondary text (light)
+            700: { value: "#484D55" }, // strong border (dark)
+            800: { value: "#363A40" }, // default border (dark), hover (dark)
+            850: { value: "#2B2E33" }, // primary text (light), raised-hover (dark)
+            900: { value: "#222529" }, // raised surface (dark)
+            950: { value: "#191B1E" }, // app canvas (dark)
+          },
+
+          /**
+           * Cobalt blue. The midtone marks active controls; deeper and lighter
+           * steps keep links readable on paper and graphite respectively.
+           */
+          cobalt: {
+            50: { value: "#EEF4FF" },
+            100: { value: "#DDEAFF" },
+            200: { value: "#BED6FF" },
+            300: { value: "#A2C5FF" },
+            400: { value: "#82B0FA" },
+            500: { value: "#4583E8" }, // brand
+            600: { value: "#285EB8" }, // accessible on light surfaces
+            700: { value: "#204B93" },
+            800: { value: "#193C75" },
+            900: { value: "#183357" },
+            950: { value: "#182C48" },
+          },
+
+          /**
+           * Editorial tints — for classifying *content* (book genres, writing
+           * tags, work chips), never for UI chrome. Four steps each: `100`/`900`
+           * are surfaces (light/dark), `600`/`400` are the text that sits on
+           * them. Each pair clears 4.5:1.
+           */
+          sage: {
+            100: { value: "#DDE7E0" },
+            400: { value: "#8FB39C" },
+            600: { value: "#3F6B51" },
+            900: { value: "#1B2E22" },
+          },
+          moss: {
+            100: { value: "#DCE6DA" },
+            400: { value: "#8CAE8F" },
+            600: { value: "#3D6140" },
+            900: { value: "#1A2A1B" },
+          },
+          sky: {
+            100: { value: "#DAE5F2" },
+            400: { value: "#8FB2D9" },
+            600: { value: "#2F5D8C" },
+            900: { value: "#16283D" },
+          },
+          periwinkle: {
+            100: { value: "#E2E1F4" },
+            400: { value: "#A9A5DE" },
+            600: { value: "#4E4899" },
+            900: { value: "#221F45" },
+          },
+          clay: {
+            100: { value: "#F4E1D6" },
+            400: { value: "#D9A184" },
+            600: { value: "#8A4E2F" },
+            900: { value: "#3A2016" },
+          },
+          ochre: {
+            100: { value: "#F5E7CC" },
+            400: { value: "#D4B36A" },
+            500: { value: "#C89B3C" }, // star rating fill
+            600: { value: "#7A5A1B" },
+            900: { value: "#33260C" },
+          },
+
+          /** Diff / status hues. Red and green with bright variants for graphite surfaces. */
+          signal: {
+            green: { value: "#1A7F37" },
+            greenBright: { value: "#3FB950" },
+            red: { value: "#CF222E" },
+            redBright: { value: "#FF6C63" },
+          },
+
+          /**
+           * Syntax hues, behind `syntax.*` only. Purpose-built like `signal`: a
+           * deep step for the light theme, a bright step for the dark one. They
+           * are not the editorial tints on purpose — the tints share one lightness
+           * so badges read as a quiet set, which is exactly what makes code
+           * illegible. `scripts/check-syntax-colors.ts` holds every pair to 5:1 on
+           * `bg.code` and a minimum distance from each other; run it after a tweak.
+           */
+          code: {
+            plum: { value: "#9A2F6B" },
+            plumBright: { value: "#E68BC0" },
+            green: { value: "#2E6B3A" },
+            greenBright: { value: "#A3CF8C" },
+            vermilion: { value: "#A8401B" },
+            vermilionBright: { value: "#F0A070" },
+            blue: { value: "#2C56A8" },
+            blueBright: { value: "#8DB2F2" },
+            amber: { value: "#855700" },
+            amberBright: { value: "#E3C173" },
+            // Comment neutral for the light theme: 6.0:1 on `bg.code`, a step lighter
+            // than `graphite.600` so it stays distinct from punctuation.
+            stone: { value: "#63635E" },
+          },
+
+          /** Official gov.br digital brand colours (Manual da Marca v3). */
+          govbr: {
+            blue: { value: "#377EC1" },
+            green: { value: "#52AE32" },
+            yellow: { value: "#FBBA00" },
+          },
         },
-        clr_neutral_50_800: {
-          // error-fallback-bg
-          value: { base: "{colors.neutral.50}", _dark: "{colors.neutral.800}" },
+      },
+
+      // ---------------------------------------------------------------------
+      // Layer 2 — semantic roles
+      // ---------------------------------------------------------------------
+      semanticTokens: {
+        colors: {
+          /** Surfaces. `canvas` is the page; everything else stacks on it. */
+          bg: {
+            canvas: { value: { base: "{colors.paper.50}", _dark: "{colors.graphite.950}" } },
+            raised: { value: { base: "{colors.paper.200}", _dark: "{colors.graphite.900}" } },
+            raisedHover: { value: { base: "{colors.paper.300}", _dark: "{colors.graphite.850}" } },
+            // Code panel only (see `code-block.tsx`). Deliberately NOT `raised`:
+            // a fenced block reads as a quoted artefact, and the references this
+            // follows paint it crisp white rather than the grey surface cards,
+            // sheets and the TOC rail share. Light mode inverts the usual stack
+            // — the panel is *brighter* than the off-white canvas, and that is what
+            // separates it. Dark mode keeps `graphite.900`: a lifted panel already
+            // reads there, and going lighter would eat into the 5:1 floor the
+            // syntax palette is held to.
+            code: { value: { base: "{colors.paper.0}", _dark: "{colors.graphite.900}" } },
+            sunken: { value: { base: "{colors.paper.100}", _dark: "{colors.graphite.900}" } },
+            // Translucent wash for hover on an unknown surface. Deliberately not a
+            // ramp step: it has to tint whatever it lands on.
+            hover: { value: { base: "rgba(10, 10, 10, 0.05)", _dark: "rgba(255, 255, 255, 0.06)" } },
+            // Track behind a progress fill.
+            track: { value: { base: "{colors.paper.400}", _dark: "{colors.graphite.800}" } },
+            // Blurred header pill. Alpha is required for the backdrop-filter.
+            overlay: { value: { base: "rgba(250, 250, 249, 0.5)", _dark: "rgba(25, 27, 30, 0.55)" } },
+            // Modal backdrop behind a sheet.
+            scrim: { value: { base: "rgba(10, 10, 10, 0.32)", _dark: "rgba(0, 0, 0, 0.5)" } },
+            // Radial bloom behind the home hero; invisible by design in light mode.
+            bloom: { value: { base: "rgba(255, 255, 255, 0)", _dark: "rgba(255, 255, 255, 0.03)" } },
+            // Solid fill for a primary control: the canvas turned inside out, so
+            // the pill reads as the darkest thing on a light page and the
+            // lightest on a dark one. Pairs with `text.onInverted` and nothing
+            // else.
+            inverted: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } },
+            invertedHover: { value: { base: "{colors.graphite.950}", _dark: "{colors.paper.500}" } },
+          },
+
+          /** Foreground. Reserve faint for incidental details. */
+          text: {
+            primary: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } },
+            secondary: { value: { base: "{colors.graphite.600}", _dark: "{colors.paper.500}" } },
+            muted: { value: { base: "{colors.graphite.500}", _dark: "{colors.graphite.300}" } },
+            faint: { value: { base: "{colors.graphite.400}", _dark: "{colors.graphite.400}" } }, // decorative only
+            accent: { value: { base: "{colors.cobalt.600}", _dark: "{colors.cobalt.400}" } },
+            // Dark ink labels the default accent fill in either theme.
+            onAccent: { value: { base: "{colors.graphite.950}", _dark: "{colors.graphite.950}" } },
+            // The only foreground allowed on `bg.inverted`.
+            onInverted: { value: { base: "{colors.paper.50}", _dark: "{colors.graphite.950}" } },
+          },
+
+          /** Strokes. `subtle` and `underline` are translucent so they work on
+           *  any surface; `default` and `strong` are solid ramp steps. */
+          border: {
+            subtle: { value: { base: "rgba(10, 10, 10, 0.12)", _dark: "rgba(255, 255, 255, 0.12)" } },
+            default: { value: { base: "{colors.paper.400}", _dark: "{colors.graphite.800}" } },
+            strong: { value: { base: "{colors.paper.500}", _dark: "{colors.graphite.700}" } },
+            accent: { value: { base: "{colors.cobalt.500}", _dark: "{colors.cobalt.400}" } },
+            // A dedicated focus colour stays legible across raised and inset surfaces.
+            focus: { value: { base: "{colors.cobalt.600}", _dark: "{colors.cobalt.400}" } },
+            underline: { value: { base: "rgba(10, 10, 10, 0.15)", _dark: "rgba(255, 255, 255, 0.3)" } },
+            underlineHover: { value: { base: "rgba(10, 10, 10, 0.3)", _dark: "rgba(255, 255, 255, 0.55)" } },
+            // Hairline between rows of a grouped list.
+            hairline: { value: { base: "rgba(10, 10, 10, 0.09)", _dark: "rgba(255, 255, 255, 0.11)" } },
+          },
+
+          /** Brand accent as an interactive role. `default` is for fills,
+           *  indicators and rings; text must go through `text.accent`. */
+          accent: {
+            default: { value: { base: "{colors.cobalt.500}", _dark: "{colors.cobalt.400}" } },
+            hover: { value: { base: "{colors.cobalt.600}", _dark: "{colors.cobalt.300}" } },
+            subtle: { value: { base: "{colors.cobalt.50}", _dark: "{colors.cobalt.950}" } },
+            emphasis: { value: { base: "{colors.cobalt.700}", _dark: "{colors.cobalt.200}" } },
+          },
+
+          /** Status. Reserved for state, never decoration. */
+          status: {
+            success: { value: { base: "{colors.signal.green}", _dark: "{colors.signal.greenBright}" } },
+            danger: { value: { base: "{colors.signal.red}", _dark: "{colors.signal.redBright}" } },
+            rating: { value: { base: "{colors.ochre.500}", _dark: "{colors.ochre.400}" } },
+            /**
+             * Not final yet — a draft. A badge set (`surface`/`text`/`border`,
+             * used together) on the ochre steps the tints use, so it inherits
+             * their verified 4.5:1. It is its own role rather than borrowing
+             * `tint.ochre`: tints classify content, this reports state. Amber
+             * keeps it apart from the neutral grey of controls such as the
+             * writing filter, which a neutral badge was mistaken for.
+             */
+            pending: {
+              surface: { value: { base: "{colors.ochre.100}", _dark: "{colors.ochre.900}" } },
+              text: { value: { base: "{colors.ochre.600}", _dark: "{colors.ochre.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.ochre.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.ochre.400} 26%, transparent)",
+                },
+              },
+            },
+          },
+
+          /** Code highlighting. Shiki's css-variables theme writes every token as
+           *  `var(--shiki-token-*)`; global.css binds those to these roles, so code
+           *  switches theme with the rest of the page. Separated by lightness as
+           *  well as hue: identifiers are near-black, colour sits at ~5–6:1, and
+           *  comments recede without dropping under 4.5:1. */
+          syntax: {
+            text: { value: { base: "{colors.graphite.850}", _dark: "{colors.paper.300}" } },
+            punctuation: { value: { base: "{colors.graphite.700}", _dark: "{colors.paper.500}" } },
+            comment: { value: { base: "{colors.code.stone}", _dark: "{colors.graphite.300}" } },
+            keyword: { value: { base: "{colors.code.plum}", _dark: "{colors.code.plumBright}" } },
+            string: { value: { base: "{colors.code.green}", _dark: "{colors.code.greenBright}" } },
+            constant: { value: { base: "{colors.code.vermilion}", _dark: "{colors.code.vermilionBright}" } },
+            function: { value: { base: "{colors.code.blue}", _dark: "{colors.code.blueBright}" } },
+            parameter: { value: { base: "{colors.code.amber}", _dark: "{colors.code.amberBright}" } },
+            // Diff lines retain their red, green and amber meanings across themes.
+            inserted: { value: { base: "{colors.moss.600}", _dark: "{colors.signal.greenBright}" } },
+            deleted: { value: { base: "{colors.signal.red}", _dark: "{colors.signal.redBright}" } },
+            changed: { value: { base: "{colors.ochre.600}", _dark: "{colors.ochre.400}" } },
+          },
+
+          /** Fixed identity colours used by the brutils wordmark. */
+          brand: {
+            govbr: {
+              blue: { value: "{colors.govbr.blue}" },
+              green: { value: "{colors.govbr.green}" },
+              yellow: { value: "{colors.govbr.yellow}" },
+            },
+          },
+
+          /** iOS-style bottom sheet with inset grouped lists. The card is always
+           *  lighter than the backdrop it sits on, in both themes. */
+          sheet: {
+            bg: { value: { base: "{colors.paper.200}", _dark: "{colors.graphite.900}" } },
+            group: { value: { base: "{colors.paper.50}", _dark: "{colors.graphite.850}" } },
+            groupActive: { value: { base: "{colors.paper.300}", _dark: "{colors.graphite.800}" } },
+            grabber: { value: { base: "rgba(10, 10, 10, 0.18)", _dark: "rgba(255, 255, 255, 0.22)" } },
+          },
+
+          /** Content classification. `surface` + `text` (+ `border`) are a
+           *  matched set — always use them together, never mix hues across a set.
+           *  `border` is the text hue at low strength, so the ring reads as a
+           *  slightly deeper edge of the same surface rather than an outline. */
+          tint: {
+            sage: {
+              surface: { value: { base: "{colors.sage.100}", _dark: "{colors.sage.900}" } },
+              text: { value: { base: "{colors.sage.600}", _dark: "{colors.sage.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.sage.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.sage.400} 26%, transparent)",
+                },
+              },
+            },
+            moss: {
+              surface: { value: { base: "{colors.moss.100}", _dark: "{colors.moss.900}" } },
+              text: { value: { base: "{colors.moss.600}", _dark: "{colors.moss.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.moss.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.moss.400} 26%, transparent)",
+                },
+              },
+            },
+            sky: {
+              surface: { value: { base: "{colors.sky.100}", _dark: "{colors.sky.900}" } },
+              text: { value: { base: "{colors.sky.600}", _dark: "{colors.sky.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.sky.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.sky.400} 26%, transparent)",
+                },
+              },
+            },
+            periwinkle: {
+              surface: { value: { base: "{colors.periwinkle.100}", _dark: "{colors.periwinkle.900}" } },
+              text: { value: { base: "{colors.periwinkle.600}", _dark: "{colors.periwinkle.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.periwinkle.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.periwinkle.400} 26%, transparent)",
+                },
+              },
+            },
+            clay: {
+              surface: { value: { base: "{colors.clay.100}", _dark: "{colors.clay.900}" } },
+              text: { value: { base: "{colors.clay.600}", _dark: "{colors.clay.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.clay.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.clay.400} 26%, transparent)",
+                },
+              },
+            },
+            ochre: {
+              surface: { value: { base: "{colors.ochre.100}", _dark: "{colors.ochre.900}" } },
+              text: { value: { base: "{colors.ochre.600}", _dark: "{colors.ochre.400}" } },
+              border: {
+                value: {
+                  base: "color-mix(in oklab, {colors.ochre.600} 22%, transparent)",
+                  _dark: "color-mix(in oklab, {colors.ochre.400} 26%, transparent)",
+                },
+              },
+            },
+          },
+
+          /**
+           * /linkbio is a standalone dark page and does not follow the site
+           * theme. Its tokens are single-valued on purpose: identical in light
+           * and dark. Nothing outside src/views/linkbio and
+           * src/layouts/linkbio-layout.astro may use them.
+           */
+          linkbio: {
+            canvas: { value: "#000000" },
+            surface: { value: "rgba(0, 0, 0, 0.65)" },
+            border: { value: "rgba(255, 255, 255, 0.15)" },
+            ring: { value: "rgba(243, 245, 247, 0.15)" },
+            textPrimary: { value: "#EEEEEE" },
+            textSecondary: { value: "rgba(255, 252, 244, 0.69)" },
+            control: { value: "#27272A" },
+            controlHover: { value: "#18181B" },
+            menuSurface: { value: "#262626" },
+            menuBorder: { value: "#252525" },
+            menuItemHover: { value: "#404040" },
+            // Matches the dark theme focus ring on this always-dark page.
+            focus: { value: "{colors.cobalt.400}" },
+            separator: { value: "#3F3F46" },
+            headingFrom: { value: "#F5F5F5" },
+            headingTo: { value: "#999999" },
+          },
         },
-        clr_neutral_950_snow: {
-          value: { base: "#0A0A0A", _dark: "#F5F5F5" },
-        },
-        clr_gray_soft: {
-          value: { base: "#404040", _dark: "#E5E5E5" },
-        },
-        clr_coral_flame: {
-          value: { base: "#EB5E41", _dark: "#EB5E41" },
-        },
-        clr_neutral_100_950_alpha_20: {
-          // header-bg
-          value: { base: "rgba(245, 245, 245, 0.2)", _dark: "rgba(10, 10, 10, 0.2)" },
-        },
-        clr_neutral_100_800: {
-          // languages-menu-bg
-          value: { base: "{colors.neutral.100}", _dark: "{colors.neutral.800}" },
-        },
-        clr_neutral_300_700: {
-          // menu-hover-bg, border-color
-          value: { base: "{colors.neutral.300}", _dark: "{colors.neutral.700}" },
-        },
-        clr_neutral_900_50: {
-          // text-hiper-primary, svg-hover-color, svg-fill-color
-          value: { base: "{colors.neutral.900}", _dark: "{colors.neutral.50}" },
-        },
-        clr_neutral_800_200: {
-          // text-primary
-          value: { base: "{colors.neutral.800}", _dark: "{colors.neutral.200}" },
-        },
-        clr_neutral_700_400: {
-          // text-secondary
-          value: { base: "{colors.neutral.700}", _dark: "{colors.neutral.400}" },
-        },
-        clr_neutral_400_500: {
-          // text-forty
-          value: { base: "{colors.neutral.400}", _dark: "{colors.neutral.500}" },
+
+        shadows: {
+          elevation: {
+            /**
+             * Header pill, lifted once the page scrolls or the mobile menu
+             * opens. In light mode a wide cool-tinted ambient cast; in dark mode
+             * the tint vanishes against the canvas, so a deeper black cast plus
+             * a hairline rim of light does the lifting instead.
+             */
+            pill: {
+              value: {
+                base: "rgba(17, 12, 46, 0.15) 0 48px 100px 0",
+                _dark: "rgba(0, 0, 0, 0.55) 0 48px 100px 0, rgba(255, 255, 255, 0.06) 0 0 0 1px",
+              },
+            },
+            /** Hairline ring around the header avatar. */
+            avatar: {
+              value: {
+                base: "0 0 0 1px rgba(119, 119, 119, 0.08), 0 2px 2px -0.5px rgba(119, 119, 119, 0.08)",
+                _dark: "0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 2px -0.5px rgba(0, 0, 0, 0.4)",
+              },
+            },
+            /** Side sheet (left/right/top). */
+            sheet: {
+              value: {
+                base: "0 -16px 48px rgba(10, 10, 10, 0.18)",
+                _dark: "0 -16px 48px rgba(0, 0, 0, 0.5)",
+              },
+            },
+            /** Bottom sheet: a hairline top edge plus an upward cast. */
+            sheetBottom: {
+              value: {
+                base: "0 -0.5px 0 rgba(10, 10, 10, 0.08), 0 -20px 60px rgba(10, 10, 10, 0.24)",
+                _dark: "0 -0.5px 0 rgba(255, 255, 255, 0.08), 0 -20px 60px rgba(0, 0, 0, 0.6)",
+              },
+            },
+            /**
+             * Circular control lifted off a sheet surface. Mirrors the header
+             * pill: a cool-tinted ambient cast in light mode, and in dark mode a
+             * deeper black cast plus a hairline rim of light, since the tint
+             * disappears against a dark canvas.
+             */
+            control: {
+              value: {
+                base: "rgba(255, 255, 255, 0.55) 0 10px 24px 0, rgba(156, 165, 178, 0.35) 0 2px 6px 0, rgba(255, 255, 255, 0.06) 0 0 0 1px",
+                _dark:
+                  "rgba(0, 0, 0, 0.55) 0 10px 24px 0, rgba(0, 0, 0, 0.35) 0 2px 6px 0, rgba(255, 255, 255, 0.06) 0 0 0 1px",
+              },
+            },
+            /** Same control settled toward the surface while held down. */
+            controlPressed: {
+              value: {
+                base: "rgba(17, 12, 46, 0.12) 0 2px 6px 0",
+                _dark: "rgba(0, 0, 0, 0.45) 0 2px 6px 0, rgba(255, 255, 255, 0.06) 0 0 0 1px",
+              },
+            },
+          },
         },
       },
     },
   },
 
-  // The output directory for your CSS system
+  // The output directory for your css system
   outdir: "styled-system",
 });

@@ -1,0 +1,12 @@
+---
+import { getEntry } from "astro:content";
+import LongformPage from "../ui/components/longform-page.astro";
+
+const entry = await getEntry("aiPages", "en");
+
+if (entry === undefined) {
+  return Astro.redirect("/404");
+}
+---
+
+<LongformPage title={entry.data.title} description={entry.data.description} body={entry.body} locale="en" />
