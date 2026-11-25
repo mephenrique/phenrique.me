@@ -5,7 +5,7 @@ slug: "building-software-in-the-era-of-ai"
 translationKey: "building-software-in-the-era-of-ai"
 locale: "en"
 date: "2026-11-07"
-kind: "note"
+kind: "article"
 draft: true
 ---
 
