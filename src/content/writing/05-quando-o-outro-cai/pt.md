@@ -2,6 +2,7 @@
 title: "Quando o outro cai"
 description: "Uma nota sobre compaixão, vingança e o que perdemos quando o próximo cai."
 slug: "quando-o-outro-cai"
+translationKey: "when-the-other-falls"
 locale: "pt"
 date: "2026-11-24"
 kind: "note"
