@@ -23,20 +23,20 @@ Astro Nano is a static, minimalist, and lightweight portfolio and blog theme bui
 
 ## 🚀 Building and Running
 
-The project uses `npm` (or `pnpm`/`yarn`) for package management.
+The project uses **pnpm**. `pnpm-lock.yaml` is the only lockfile, and the security overrides in `pnpm-workspace.yaml` apply only to pnpm installs — don't use npm or yarn.
 
-- **Install dependencies:** `npm install`
-- **Development server:** `npm run dev` (starts at `localhost:4321`)
-- **Build for production:** `npm run build` (runs `astro check` and `astro build`)
-- **Preview production build:** `npm run preview`
-- **Linting:** `npm run lint` or `npm run lint:fix`
-- **Panda CSS Codegen:** `npm run prepare` (automatically runs `panda codegen`)
+- **Install dependencies:** `pnpm install`
+- **Development server:** `pnpm dev` (starts at `localhost:4321`)
+- **Build for production:** `pnpm build` (runs `astro check` and `astro build`)
+- **Preview production build:** `pnpm preview`
+- **Linting:** `pnpm lint` or `pnpm lint:fix`
+- **Panda CSS Codegen:** `pnpm prepare` (automatically runs `panda codegen`)
 
 ## 🎨 Development Conventions
 
 ### Styling (Panda CSS)
 - The `styled-system/` directory contains the generated CSS utility functions.
-- Run `npm run prepare` (`panda codegen`) after changing `panda.config.ts`. A running dev server does **not** pick up config changes — restart it.
+- Run `pnpm prepare` (`panda codegen`) after changing `panda.config.ts`. A running dev server does **not** pick up config changes — restart it.
 - In `panda.config.ts`, tokens go under `theme.extend.*`, never `theme.*` directly. A top-level `theme.tokens` **replaces** Panda's preset instead of merging, silently removing `fontSizes`, `sizes`, `radii` and the default shadow scale.
 
 ### Fonts
@@ -72,7 +72,7 @@ Rules worth knowing before writing styles:
 - **Panda extracts styles statically.** A computed token path such as `` css({ bg: `tint.${hue}.surface` }) `` generates no CSS at all. Use a `Record<Hue, string>` of literal `css()` calls and index into it. The same applies to token names inside JS strings: write CSS custom properties in kebab-case (`--colors-bg-raised-hover`), not the dotted token path.
 - **`linkbio.*` is scoped.** Only `src/views/linkbio/**` and `src/layouts/linkbio-layout.astro` may use it, and those files use nothing else — `/linkbio` is always dark and does not follow the site theme.
 - **Elevation** lives in `shadows.elevation.*`; from plain CSS use `var(--shadows-elevation-pill)`, which carries both themes.
-- **Code highlighting** uses Shiki's css-variables theme (`src/utils/code-theme.ts`): markup carries `var(--shiki-token-*)`, and `global.css` binds those to `syntax.*`. Never hard-code a Shiki theme's hex. `npm run check:syntax` (part of `build`) fails when a role drops under 5:1 on `bg.code` (the code panel's own surface token — not `bg.raised`, which cards and sheets keep) or sits within ΔE 8 (OKLab) of another role, in either theme — contrast alone let a palette of near-identical browns through. Comark preloads only vue, tsx, svelte, ts, js, bash, json, yaml and astro; any other fence language (e.g. `kotlin`) must be added to `languages` in `code-theme.ts`, or it silently renders unhighlighted.
+- **Code highlighting** uses Shiki's css-variables theme (`src/utils/code-theme.ts`): markup carries `var(--shiki-token-*)`, and `global.css` binds those to `syntax.*`. Never hard-code a Shiki theme's hex. `pnpm check:syntax` (part of `build`) fails when a role drops under 5:1 on `bg.code` (the code panel's own surface token — not `bg.raised`, which cards and sheets keep) or sits within ΔE 8 (OKLab) of another role, in either theme — contrast alone let a palette of near-identical browns through. Comark preloads only vue, tsx, svelte, ts, js, bash, json, yaml and astro; any other fence language (e.g. `kotlin`) must be added to `languages` in `code-theme.ts`, or it silently renders unhighlighted.
 - Long-form content: the `.prose` layer in `src/ui/styles/global.css` styles rendered Markdown, entirely in semantic tokens. Change it there, not per-article. It sits in its own cascade layer declared **before** Panda's (`@layer reset, base, tokens, prose, recipes, utilities`) so a component can still override a prose default with `css()`.
 - **The reading column.** `.prose` is typography; `.prose-longform` adds the grid. Text sits on `--prose-measure` (40rem, ~79 characters); a block spans the full article width by carrying `data-prose-track="wide"` — placement lives in `global.css`, not in the components. Only tables and `::figure` break out; code blocks stay on the measure. Prose headings are Fraunces, body is Geist. Vertical rhythm is **top margins only, never bottom**: margins do not collapse between grid items. Panels (code, tables, figures) carry `data-prose-panel` for spacing — never reuse `data-prose-track` for rhythm, since a block that stops breaking out must not lose its gaps.
 - **Components in Markdown.** `::callout`, `::aside`, `::quote`, `::figure` and `::tweet` are registered in `src/ui/components/prose/index.tsx` and listed in `tags.ts`. The parser validates documents against that list, so an unregistered `::name` fails the build instead of rendering as an unstyled inline element. Add a component to both files or not at all.
