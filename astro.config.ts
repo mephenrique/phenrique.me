@@ -80,6 +80,16 @@ export default defineConfig({
     },
   ],
   output: "static",
+  vite: {
+    optimizeDeps: {
+      include: [
+        "astro/virtual-modules/transitions-events.js",
+        "astro/virtual-modules/transitions-router.js",
+        "astro/virtual-modules/transitions-swap-functions.js",
+        "astro/virtual-modules/transitions-types.js",
+      ],
+    },
+  },
   adapter: vercel({
     webAnalytics: {
       enabled: true,

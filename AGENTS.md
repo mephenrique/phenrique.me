@@ -23,20 +23,20 @@ Astro Nano is a static, minimalist, and lightweight portfolio and blog theme bui
 
 ## 🚀 Building and Running
 
-The project uses `npm` (or `pnpm`/`yarn`) for package management.
+The project uses **pnpm**. `pnpm-lock.yaml` is the only lockfile, and the security overrides in `pnpm-workspace.yaml` apply only to pnpm installs — don't use npm or yarn.
 
-- **Install dependencies:** `npm install`
-- **Development server:** `npm run dev` (starts at `localhost:4321`)
-- **Build for production:** `npm run build` (runs `astro check` and `astro build`)
-- **Preview production build:** `npm run preview`
-- **Linting:** `npm run lint` or `npm run lint:fix`
-- **Panda CSS Codegen:** `npm run prepare` (automatically runs `panda codegen`)
+- **Install dependencies:** `pnpm install`
+- **Development server:** `pnpm dev` (starts at `localhost:4321`)
+- **Build for production:** `pnpm build` (runs `astro check` and `astro build`)
+- **Preview production build:** `pnpm preview`
+- **Linting:** `pnpm lint` or `pnpm lint:fix`
+- **Panda CSS Codegen:** `pnpm prepare` (automatically runs `panda codegen`)
 
 ## 🎨 Development Conventions
 
 ### Styling (Panda CSS)
 - The `styled-system/` directory contains the generated CSS utility functions.
-- Run `npm run prepare` (`panda codegen`) after changing `panda.config.ts`. A running dev server does **not** pick up config changes — restart it.
+- Run `pnpm prepare` (`panda codegen`) after changing `panda.config.ts`. A running dev server does **not** pick up config changes — restart it.
 - In `panda.config.ts`, tokens go under `theme.extend.*`, never `theme.*` directly. A top-level `theme.tokens` **replaces** Panda's preset instead of merging, silently removing `fontSizes`, `sizes`, `radii` and the default shadow scale.
 
 ### Fonts
@@ -72,11 +72,11 @@ Rules worth knowing before writing styles:
 - **Panda extracts styles statically.** A computed token path such as `` css({ bg: `tint.${hue}.surface` }) `` generates no CSS at all. Use a `Record<Hue, string>` of literal `css()` calls and index into it. The same applies to token names inside JS strings: write CSS custom properties in kebab-case (`--colors-bg-raised-hover`), not the dotted token path.
 - **`linkbio.*` is scoped.** Only `src/views/linkbio/**` and `src/layouts/linkbio-layout.astro` may use it, and those files use nothing else — `/linkbio` is always dark and does not follow the site theme.
 - **Elevation** lives in `shadows.elevation.*`; from plain CSS use `var(--shadows-elevation-pill)`, which carries both themes.
-- **Code highlighting** uses Shiki's css-variables theme (`src/utils/code-theme.ts`): markup carries `var(--shiki-token-*)`, and `global.css` binds those to `syntax.*`. Never hard-code a Shiki theme's hex. `npm run check:syntax` (part of `build`) fails when a role drops under 5:1 on `bg.code` (the code panel's own surface token — not `bg.raised`, which cards and sheets keep) or sits within ΔE 8 (OKLab) of another role, in either theme — contrast alone let a palette of near-identical browns through. Comark preloads only vue, tsx, svelte, ts, js, bash, json, yaml and astro; any other fence language (e.g. `kotlin`) must be added to `languages` in `code-theme.ts`, or it silently renders unhighlighted.
+- **Code highlighting** uses Shiki's css-variables theme (`src/utils/code-theme.ts`): markup carries `var(--shiki-token-*)`, and `global.css` binds those to `syntax.*`. Never hard-code a Shiki theme's hex. `pnpm check:syntax` (part of `build`) fails when a role drops under 5:1 on `bg.code` (the code panel's own surface token — not `bg.raised`, which cards and sheets keep) or sits within ΔE 8 (OKLab) of another role, in either theme — contrast alone let a palette of near-identical browns through. Comark preloads only vue, tsx, svelte, ts, js, bash, json, yaml and astro; any other fence language (e.g. `kotlin`) must be added to `languages` in `code-theme.ts`, or it silently renders unhighlighted.
 - Long-form content: the `.prose` layer in `src/ui/styles/global.css` styles rendered Markdown, entirely in semantic tokens. Change it there, not per-article. It sits in its own cascade layer declared **before** Panda's (`@layer reset, base, tokens, prose, recipes, utilities`) so a component can still override a prose default with `css()`.
 - **The reading column.** `.prose` is typography; `.prose-longform` adds the grid. Text sits on `--prose-measure` (40rem, ~79 characters); a block spans the full article width by carrying `data-prose-track="wide"` — placement lives in `global.css`, not in the components. Only tables and `::figure` break out; code blocks stay on the measure. Prose headings are Fraunces, body is Geist. Vertical rhythm is **top margins only, never bottom**: margins do not collapse between grid items. Panels (code, tables, figures) carry `data-prose-panel` for spacing — never reuse `data-prose-track` for rhythm, since a block that stops breaking out must not lose its gaps.
 - **Components in Markdown.** `::callout`, `::aside`, `::quote`, `::figure` and `::tweet` are registered in `src/ui/components/prose/index.tsx` and listed in `tags.ts`. The parser validates documents against that list, so an unregistered `::name` fails the build instead of rendering as an unstyled inline element. Add a component to both files or not at all.
-- **Checking the prose layer.** There are no fixture posts; judge a change against the real pages that use it. `/about` has links, footnotes, `::callout` and `::quote`. `/writing/interfaces-are-arguments` has `::tweet` embeds, tables and a code block. `/writing/the-shape-of-a-good-change` has task lists. Nothing live uses `::aside` or `::figure`, so a change touching those needs a throwaway post to check against — and since drafts are published too, never commit it.
+- **Checking the prose layer.** There are no fixture posts; judge a change against the real pages that use it. `/about` has links, footnotes and `::quote`. `/ai` has tables, footnotes and two `::callout`s. Nothing live uses `::tweet`, `::aside`, `::figure`, code blocks or task lists, so a change touching those needs a throwaway post to check against — and since drafts are published too, never commit it.
 
 ### Content
 - Content is managed via the Astro Content Layer in `src/content.config.ts`.
@@ -90,11 +90,11 @@ Rules worth knowing before writing styles:
 
 ### Agent-readable pages (`.md` endpoints)
 
-The document pages — `/about`, `/work`, `/reading`, `/colophon` and every article, in both locales — each have a plain-Markdown twin at their own address plus `.md`: `/work` and `/work.md`. `/llms.txt` indexes them. The listing pages (`/` and `/writing`) have none; the index already enumerates what they would link to.
+The document pages — `/about`, `/work`, `/reading`, `/ai`, `/colophon` and every article, in both locales — each have a plain-Markdown twin at their own address plus `.md`: `/work` and `/work.md`. `/llms.txt` indexes them. The listing pages (`/` and `/writing`) have none; the index already enumerates what they would link to.
 
 - **`markdownPath` in `src/utils/markdown/routes.ts` is the registry.** It is the single answer to "does this page have a twin", read by both `head.astro` (which emits `<link rel="alternate" type="text/markdown">`) and the build. A new `.md` endpoint that is not listed there ships a Markdown version nothing links to and no crawler finds. Articles are matched by their `/writing/` prefix; every other path is listed explicitly, for the same reason as `TRANSLATED_PATHS`.
 - **Add the page to `/llms.txt` too** (`src/pages/llms.txt.ts`). It is generated from the collections, so articles appear on their own, but a new static page needs a line in `pagesFor`.
-- **Prose pages serialise themselves; data pages need a composer.** Where the body is Markdown (`about`, `colophon`, `writing`), the endpoint is frontmatter plus `entry.body`. Where the page is structured fields rendered as cards and grids (`work`, `reading`), a composer in `src/utils/markdown/` builds the document from the same entry and the same i18n dictionary the view reads — mirroring the page's section order and using its dictionary labels, so the two cannot drift. Never convert the rendered HTML; the structure is the part worth keeping.
+- **Prose pages serialise themselves; data pages need a composer.** Where the body is Markdown (`about`, `ai`, `colophon`, `writing`), the endpoint is frontmatter plus `entry.body`. Where the page is structured fields rendered as cards and grids (`work`, `reading`), a composer in `src/utils/markdown/` builds the document from the same entry and the same i18n dictionary the view reads — mirroring the page's section order and using its dictionary labels, so the two cannot drift. Never convert the rendered HTML; the structure is the part worth keeping.
 - **`flattenDirectives` rewrites Comark's `::component` syntax** into standard Markdown — callouts, quotes and tweets become blockquotes carrying the words the page displays, resolving a callout's label exactly as `createCallout` does. It works on the source, line by line, and skips code fences. A new `::component` with no case in `render` falls through to its own body: register one there when the box carries meaning of its own.
 - **Drafts follow the page.** Build paths from `routablePosts` and list from `listedPosts`, so a draft never has a `.md` twin its page does not also have.
 - **Dates and locales.** Use the view's own `Intl` formatter settings, including `timeZone: "UTC"` — these are plain YAML days parsed as UTC midnight, and formatting in the build machine's zone renders the previous day west of Greenwich.

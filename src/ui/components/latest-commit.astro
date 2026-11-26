@@ -83,16 +83,22 @@ const commit = getLatestCommit();
     return formatter.format(Math.round(delta), "year");
   }
 
-  document.querySelectorAll<HTMLElement>("[data-latest-commit]").forEach((element) => {
-    const timeElement = element.querySelector("time");
-    const isoDate = element.dataset.date;
+  function formatCommitDates() {
+    document.querySelectorAll<HTMLElement>("[data-latest-commit]").forEach((element) => {
+      const timeElement = element.querySelector("time");
+      const isoDate = element.dataset.date;
 
-    if (!timeElement || !isoDate) return;
+      if (!timeElement || !isoDate) return;
 
-    const date = new Date(isoDate);
+      const date = new Date(isoDate);
 
-    if (Number.isNaN(date.getTime())) return;
+      if (Number.isNaN(date.getTime())) return;
 
-    timeElement.textContent = relativeTime(date, element.dataset.lang || "en");
-  });
+      timeElement.textContent = relativeTime(date, element.dataset.lang || "en");
+    });
+  }
+
+  // The module runs once, but ClientRouter swaps in a fresh footer on every
+  // navigation; `astro:page-load` fires on the first load and after each swap.
+  document.addEventListener("astro:page-load", formatCommitDates);
 </script>
